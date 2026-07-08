@@ -2,6 +2,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, List, Optional
 
+import numpy as np
 import pandas as pd
 
 
@@ -47,7 +48,7 @@ class SchemaValidator:
         )
 
     def get_failures_df(self) -> pd.DataFrame:
-        """Returns log failures as a pandas DataFrame."""
+        """Returns logged failures as a pandas DataFrame."""
         if not self.failures:
             return pd.DataFrame(
                 columns=[
@@ -103,7 +104,7 @@ class SchemaValidator:
             self.log_failure(
                 company_ticker="NULL",
                 file_name=file_name,
-                row_index=int(idx),
+                row_index=int(idx) if isinstance(idx, (int, np.integer)) else idx,
                 rule_id="DQ-02",
                 severity="CRITICAL",
                 column_name=ticker_col,
@@ -115,10 +116,12 @@ class SchemaValidator:
         duplicated_tickers = df[df[ticker_col].duplicated(keep=False)]
         for idx, row in duplicated_tickers.iterrows():
             ticker = row[ticker_col]
+            if pd.isna(ticker) or str(ticker).strip() == "":
+                continue
             self.log_failure(
                 company_ticker=ticker,
                 file_name=file_name,
-                row_index=int(idx),
+                row_index=int(idx) if isinstance(idx, (int, np.integer)) else idx,
                 rule_id="DQ-01",
                 severity="CRITICAL",
                 column_name=ticker_col,
@@ -127,7 +130,7 @@ class SchemaValidator:
             )
 
     # -------------------------------------------------------------------------
-    # DQ-03 & DQ-04 & DQ-07 & DQ-08: Financials/Prices Integrity Checks
+    # DQ-03 & DQ-04: Referential Integrity Check
     # -------------------------------------------------------------------------
     def validate_relationships(
         self,
@@ -159,7 +162,7 @@ class SchemaValidator:
                 self.log_failure(
                     company_ticker=ticker,
                     file_name=file_name,
-                    row_index=int(idx),
+                    row_index=int(idx) if isinstance(idx, (int, np.integer)) else idx,
                     rule_id=rule_id,
                     severity="CRITICAL",
                     column_name=ticker_col,
@@ -184,7 +187,9 @@ class SchemaValidator:
                     self.log_failure(
                         company_ticker=ticker,
                         file_name=file_name,
-                        row_index=int(idx),
+                        row_index=(
+                            int(idx) if isinstance(idx, (int, np.integer)) else idx
+                        ),
                         rule_id="DQ-06",
                         severity="CRITICAL",
                         column_name=col,
@@ -194,14 +199,18 @@ class SchemaValidator:
 
         # DQ-05: PK Uniqueness Check (ticker, date)
         if ticker_col in df.columns and date_col in df.columns:
-            duplicates = df[df.duplicated(subset=[ticker_col, date_col], keep=False)]
+            # Drop null key rows to prevent double logging with DQ-06
+            valid_keys = df.dropna(subset=[ticker_col, date_col])
+            duplicates = valid_keys[
+                valid_keys.duplicated(subset=[ticker_col, date_col], keep=False)
+            ]
             for idx, row in duplicates.iterrows():
                 ticker = row[ticker_col]
                 dt = row[date_col]
                 self.log_failure(
                     company_ticker=ticker,
                     file_name=file_name,
-                    row_index=int(idx),
+                    row_index=int(idx) if isinstance(idx, (int, np.integer)) else idx,
                     rule_id="DQ-05",
                     severity="CRITICAL",
                     column_name=f"{ticker_col}, {date_col}",
@@ -214,13 +223,17 @@ class SchemaValidator:
             for idx, row in df.iterrows():
                 ticker = row.get(ticker_col, "UNKNOWN")
                 dt = row[date_col]
+                if pd.isna(dt):
+                    continue
                 try:
                     pd.to_datetime(dt, errors="raise")
                 except Exception:
                     self.log_failure(
                         company_ticker=ticker,
                         file_name=file_name,
-                        row_index=int(idx),
+                        row_index=(
+                            int(idx) if isinstance(idx, (int, np.integer)) else idx
+                        ),
                         rule_id="DQ-08",
                         severity="CRITICAL",
                         column_name=date_col,
@@ -239,7 +252,9 @@ class SchemaValidator:
                     self.log_failure(
                         company_ticker=ticker,
                         file_name=file_name,
-                        row_index=int(idx),
+                        row_index=(
+                            int(idx) if isinstance(idx, (int, np.integer)) else idx
+                        ),
                         rule_id="DQ-09",
                         severity="CRITICAL",
                         column_name=col,
@@ -257,7 +272,7 @@ class SchemaValidator:
                 self.log_failure(
                     company_ticker=ticker,
                     file_name=file_name,
-                    row_index=int(idx),
+                    row_index=int(idx) if isinstance(idx, (int, np.integer)) else idx,
                     rule_id="DQ-14",
                     severity="WARNING",
                     column_name=vol_col,
@@ -283,7 +298,9 @@ class SchemaValidator:
                     self.log_failure(
                         company_ticker=ticker,
                         file_name=file_name,
-                        row_index=int(idx),
+                        row_index=(
+                            int(idx) if isinstance(idx, (int, np.integer)) else idx
+                        ),
                         rule_id="DQ-15",
                         severity="WARNING",
                         column_name="open, high, low, close",
@@ -303,14 +320,17 @@ class SchemaValidator:
 
         # DQ-07: PK Uniqueness Check (ticker, year)
         if ticker_col in df.columns and year_col in df.columns:
-            duplicates = df[df.duplicated(subset=[ticker_col, year_col], keep=False)]
+            valid_keys = df.dropna(subset=[ticker_col, year_col])
+            duplicates = valid_keys[
+                valid_keys.duplicated(subset=[ticker_col, year_col], keep=False)
+            ]
             for idx, row in duplicates.iterrows():
                 ticker = row[ticker_col]
                 yr = row[year_col]
                 self.log_failure(
                     company_ticker=ticker,
                     file_name=file_name,
-                    row_index=int(idx),
+                    row_index=int(idx) if isinstance(idx, (int, np.integer)) else idx,
                     rule_id="DQ-07",
                     severity="CRITICAL",
                     column_name=f"{ticker_col}, {year_col}",
@@ -323,6 +343,8 @@ class SchemaValidator:
             for idx, row in df.iterrows():
                 ticker = row.get(ticker_col, "UNKNOWN")
                 yr = row[year_col]
+                if pd.isna(yr):
+                    continue
                 try:
                     yr_val = int(yr)
                     if not (2000 <= yr_val <= 2030):
@@ -331,7 +353,9 @@ class SchemaValidator:
                     self.log_failure(
                         company_ticker=ticker,
                         file_name=file_name,
-                        row_index=int(idx),
+                        row_index=(
+                            int(idx) if isinstance(idx, (int, np.integer)) else idx
+                        ),
                         rule_id="DQ-08",
                         severity="CRITICAL",
                         column_name=year_col,
@@ -360,7 +384,9 @@ class SchemaValidator:
                     self.log_failure(
                         company_ticker=ticker,
                         file_name=file_name,
-                        row_index=int(idx),
+                        row_index=(
+                            int(idx) if isinstance(idx, (int, np.integer)) else idx
+                        ),
                         rule_id="DQ-10",
                         severity="WARNING",
                         column_name=sales_col,
@@ -369,7 +395,6 @@ class SchemaValidator:
                     )
 
             # DQ-11: Operating Profit Margin (OPM) (Warning)
-            # Checked if within [-1.0, 1.0] or [-100.0, 100.0] depending on reporting unit
             opm_col = next(
                 (
                     c
@@ -390,7 +415,9 @@ class SchemaValidator:
                         self.log_failure(
                             company_ticker=ticker,
                             file_name=file_name,
-                            row_index=int(idx),
+                            row_index=(
+                                int(idx) if isinstance(idx, (int, np.integer)) else idx
+                            ),
                             rule_id="DQ-11",
                             severity="WARNING",
                             column_name=opm_col,
@@ -425,7 +452,9 @@ class SchemaValidator:
                         self.log_failure(
                             company_ticker=ticker,
                             file_name=file_name,
-                            row_index=int(idx),
+                            row_index=(
+                                int(idx) if isinstance(idx, (int, np.integer)) else idx
+                            ),
                             rule_id="DQ-16",
                             severity="WARNING",
                             column_name="gp, op, net_income",
@@ -473,7 +502,9 @@ class SchemaValidator:
                         self.log_failure(
                             company_ticker=ticker,
                             file_name=file_name,
-                            row_index=int(idx),
+                            row_index=(
+                                int(idx) if isinstance(idx, (int, np.integer)) else idx
+                            ),
                             rule_id="DQ-12",
                             severity="WARNING",
                             column_name="assets, liabilities, equity",
@@ -520,7 +551,9 @@ class SchemaValidator:
                         self.log_failure(
                             company_ticker=ticker,
                             file_name=file_name,
-                            row_index=int(idx),
+                            row_index=(
+                                int(idx) if isinstance(idx, (int, np.integer)) else idx
+                            ),
                             rule_id="DQ-13",
                             severity="WARNING",
                             column_name="beginning_cash, ending_cash, net_change",

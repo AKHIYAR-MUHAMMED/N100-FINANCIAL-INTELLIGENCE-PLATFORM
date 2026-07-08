@@ -1,4 +1,5 @@
 import sqlite3
+
 import pytest
 
 from src.database import DatabaseManager
@@ -33,7 +34,6 @@ def test_initialize_schema(temp_db_manager):
 
 def test_foreign_key_enforcement(temp_db_manager):
     """Test that FK violations raise sqlite3.IntegrityError."""
-    # Attempt to insert a company referencing a non-existent sector
     with pytest.raises(sqlite3.IntegrityError):
         temp_db_manager.execute_update(
             "INSERT INTO companies (ticker, name, sector_name, industry) "
@@ -44,19 +44,16 @@ def test_foreign_key_enforcement(temp_db_manager):
 
 def test_foreign_key_success(temp_db_manager):
     """Test that valid foreign keys succeed."""
-    # Insert sector first
     temp_db_manager.execute_update(
         "INSERT INTO sectors (sector_name, sector_description) VALUES (?, ?);",
         ("Technology", "IT Services"),
     )
-    # Insert company next
     temp_db_manager.execute_update(
         "INSERT INTO companies (ticker, name, sector_name, industry) "
         "VALUES (?, ?, ?, ?);",
         ("TCS", "Tata Consultancy Services", "Technology", "IT Services"),
     )
 
-    # Query back
     rows = temp_db_manager.execute_query(
         "SELECT * FROM companies WHERE ticker = ?;", ("TCS",)
     )
@@ -66,7 +63,6 @@ def test_foreign_key_success(temp_db_manager):
 
 def test_check_constraints(temp_db_manager):
     """Test that CHECK constraints (e.g. OPM margin ranges) are enforced."""
-    # Insert sector and company
     temp_db_manager.execute_update(
         "INSERT INTO sectors (sector_name) VALUES (?);", ("Technology",)
     )
@@ -75,7 +71,6 @@ def test_check_constraints(temp_db_manager):
         ("TCS", "Tata", "Technology"),
     )
 
-    # Try inserting P&L with invalid OPM (> 1.0)
     with pytest.raises(sqlite3.IntegrityError):
         temp_db_manager.execute_update(
             "INSERT INTO income_statements (ticker, year, sales, opm) "
@@ -86,6 +81,5 @@ def test_check_constraints(temp_db_manager):
 
 def test_run_fk_check(temp_db_manager):
     """Test that run_fk_check correctly identifies FK issues."""
-    # Verify that initially there are 0 violations
     violations = temp_db_manager.run_fk_check()
     assert len(violations) == 0

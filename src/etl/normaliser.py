@@ -1,5 +1,4 @@
 import datetime
-from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -25,7 +24,6 @@ def normalize_year(year: Any) -> int:
         raise ValueError("Year cannot be null or empty")
 
     if isinstance(year, bool):
-        # Check bool first because bool is a subclass of int in Python
         raise TypeError("Boolean values are not supported for year normalization")
 
     # Handle datetime/date/Timestamp objects
@@ -37,6 +35,10 @@ def normalize_year(year: Any) -> int:
         year_str = year.strip()
         if not year_str:
             raise ValueError("Year cannot be empty string")
+
+        # Remove any leading single quotes if formatted as text in Excel (e.g. "'2026")
+        if year_str.startswith("'"):
+            year_str = year_str[1:]
 
         # Try converting directly to float first (handles "2026.0", "2026", "26")
         try:
@@ -122,20 +124,3 @@ def normalize_ticker(ticker: Any) -> str:
         raise ValueError(f"Ticker became empty after normalisation: {ticker}")
 
     return normalized
-
-
-def load_excel_data(filepath: Path, sheet_name: Any = 0) -> pd.DataFrame:
-    """Read a sheet from an Excel file safely into a pandas DataFrame.
-
-    Raises:
-        FileNotFoundError: If the file does not exist.
-        ValueError: If file is invalid or sheet is missing.
-    """
-    if not filepath.is_file():
-        raise FileNotFoundError(f"File not found: {filepath}")
-
-    try:
-        df = pd.read_excel(filepath, sheet_name=sheet_name)
-        return df
-    except Exception as e:
-        raise ValueError(f"Failed to load Excel file {filepath}: {e}")

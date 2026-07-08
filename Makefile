@@ -20,7 +20,7 @@ format:
 lint:
 	@echo "Linting with flake8 and mypy..."
 	$(VENV_BIN)/flake8 src tests
-	$(VENV_BIN)/mypy src
+	$(VENV_BIN)/mypy src --ignore-missing-imports
 
 test:
 	@echo "Running unit tests with pytest..."

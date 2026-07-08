@@ -28,14 +28,12 @@ class DatabaseManager:
     def initialize_schema(
         self,
         schema_sql_path: Path = (
-            Path(__file__).resolve().parents[1] / "schema.sql"
+            Path(__file__).resolve().parents[1] / "db" / "schema.sql"
         ),
     ) -> None:
         """Reads schema.sql and runs it against the database."""
         if not schema_sql_path.is_file():
-            raise FileNotFoundError(
-                f"Schema file not found at: {schema_sql_path}"
-            )
+            raise FileNotFoundError(f"Schema file not found at: {schema_sql_path}")
 
         with open(schema_sql_path, "r", encoding="utf-8") as f:
             schema_script = f.read()

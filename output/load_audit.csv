@@ -1,0 +1,13 @@
+file_name,records_processed,records_loaded,failures_count,status
+sectors.xlsx,5,5,0,SUCCESS
+companies.xlsx,92,92,0,SUCCESS
+income_statements.xlsx,1276,1276,2,SUCCESS
+balance_sheets.xlsx,1312,1312,1,SUCCESS
+cash_flows.xlsx,1187,1187,1,SUCCESS
+ratios.xlsx,1000,1000,0,SUCCESS
+stock_prices_core.xlsx,3000,3000,1,SUCCESS
+stock_prices_supp1.xlsx,1000,1000,0,SUCCESS
+stock_prices_supp2.xlsx,1000,1000,0,SUCCESS
+stock_prices_supp3.xlsx,520,520,0,SUCCESS
+corporate_actions.xlsx,50,50,0,SUCCESS
+audit_metadata.xlsx,10,0,0,SUCCESS

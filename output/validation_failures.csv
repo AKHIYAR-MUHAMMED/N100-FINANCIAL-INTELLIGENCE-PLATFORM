@@ -1,0 +1,6 @@
+company_ticker,file_name,row_index,rule_id,severity,column_name,invalid_value,message
+COMP10,income_statements.xlsx,126,DQ-10,WARNING,sales,0,Revenue/Sales should be positive. Found: 0
+COMP12,income_statements.xlsx,156,DQ-16,WARNING,"gp, op, net_income","GP:50, OP:100.0, NI:96.8",Inconsistent profit ordering (Gross Profit >= Operating Profit >= Net Income)
+COMP20,balance_sheets.xlsx,285,DQ-12,WARNING,"assets, liabilities, equity","A:9999, L:2760, E:4140 (Diff: 3099.00)",Balance sheet does not balance: Assets != Liabilities + Equity
+COMP30,cash_flows.xlsx,377,DQ-13,WARNING,"beginning_cash, ending_cash, net_change","Start:100, End:999.0, Net:34.5 (Diff: 864.50)",Cash flow reconciliation discrepancy: End Cash != Start Cash + Net Change
+COMP41,stock_prices_core.xlsx,2400,DQ-15,WARNING,"open, high, low, close","O:180.0, H:50.0, L:150.0, C:181.0",Inconsistent daily stock prices (High must be maximum and Low must be minimum)

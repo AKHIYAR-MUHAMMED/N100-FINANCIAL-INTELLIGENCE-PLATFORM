@@ -1,11 +1,10 @@
 import datetime
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import pytest
 
-from src.loader import load_excel_data, normalize_ticker, normalize_year
+from src.etl.normaliser import normalize_ticker, normalize_year
 
 # ==============================================================================
 # Tests for normalize_year()
@@ -20,6 +19,7 @@ from src.loader import load_excel_data, normalize_ticker, normalize_year
         ("2026", 2026),
         (" 2026 ", 2026),
         ("2026.0", 2026),
+        ("'2026", 2026),  # leading quote test
     ],
 )
 def test_normalize_year_standard(year, expected):
@@ -191,38 +191,5 @@ def test_normalize_ticker_invalid_types(invalid_type):
 
 def test_normalize_ticker_multiple_dots():
     """Test ticker normalisation for tickers with multiple periods."""
-    # Suffix is removed, but middle dot is preserved
     assert normalize_ticker("NIFTY.50.NS") == "NIFTY.50"
     assert normalize_ticker("COM.RELIANCE") == "COM.RELIANCE"
-
-
-# ==============================================================================
-# Tests for load_excel_data()
-# ==============================================================================
-
-
-def test_load_excel_data_missing_file():
-    """Test that a missing file raises FileNotFoundError."""
-    with pytest.raises(FileNotFoundError):
-        load_excel_data(Path("non_existent_file.xlsx"))
-
-
-def test_load_excel_data_invalid_file(tmp_path):
-    """Test that a corrupted or invalid file raises ValueError."""
-    bad_file = tmp_path / "bad_file.xlsx"
-    bad_file.write_text("not a real excel file")
-    with pytest.raises(ValueError):
-        load_excel_data(bad_file)
-
-
-def test_load_excel_data_success(tmp_path):
-    """Test successful reading of a valid Excel sheet."""
-    excel_file = tmp_path / "test_data.xlsx"
-    df_expected = pd.DataFrame({"Ticker": ["TCS", "RELIANCE"], "Year": [2026, 2025]})
-
-    # Save to Excel
-    df_expected.to_excel(excel_file, index=False)
-
-    # Load and verify
-    df_loaded = load_excel_data(excel_file)
-    pd.testing.assert_frame_equal(df_loaded, df_expected)
