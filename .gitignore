@@ -1,0 +1,25 @@
+# Python virtual env
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Local environment variables
+.env
+
+# SQLite databases
+*.db
+
+# Logs
+*.log
+logs/
+
+# IDE files
+.vscode/
+.idea/
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
