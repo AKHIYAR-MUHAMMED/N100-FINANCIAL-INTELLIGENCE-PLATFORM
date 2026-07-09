@@ -1,22 +1,49 @@
 -- SQLite schema for Nifty 100 stock market analysis database (nifty100.db)
 
+PRAGMA foreign_keys = OFF;
+
+-- Drop legacy tables if they exist
+DROP TABLE IF EXISTS income_statements;
+DROP TABLE IF EXISTS balance_sheets;
+DROP TABLE IF EXISTS cash_flows;
+DROP TABLE IF EXISTS ratios;
+
+-- Drop tables in reverse dependency order
+DROP TABLE IF EXISTS load_audit;
+DROP TABLE IF EXISTS validation_failures;
+DROP TABLE IF EXISTS peer_groups;
+DROP TABLE IF EXISTS prosandcons;
+DROP TABLE IF EXISTS documents;
+DROP TABLE IF EXISTS analysis;
+DROP TABLE IF EXISTS corporate_actions;
+DROP TABLE IF EXISTS financial_ratios;
+DROP TABLE IF EXISTS stock_prices;
+DROP TABLE IF EXISTS cashflow;
+DROP TABLE IF EXISTS balancesheet;
+DROP TABLE IF EXISTS profitandloss;
+DROP TABLE IF EXISTS companies;
+DROP TABLE IF EXISTS sectors;
+
+PRAGMA foreign_keys = ON;
+
 -- 1. Table: sectors (Sector and industry master)
-CREATE TABLE IF NOT EXISTS sectors (
+CREATE TABLE sectors (
     sector_name TEXT PRIMARY KEY,
     sector_description TEXT
 );
 
 -- 2. Table: companies (Company metadata)
-CREATE TABLE IF NOT EXISTS companies (
+CREATE TABLE companies (
     ticker TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     sector_name TEXT NOT NULL,
     industry TEXT,
+    website TEXT, -- Website URL for companies, used to validate DQ-10
     FOREIGN KEY (sector_name) REFERENCES sectors (sector_name) ON DELETE RESTRICT
 );
 
--- 3. Table: income_statements (Profit & Loss statements)
-CREATE TABLE IF NOT EXISTS income_statements (
+-- 3. Table: profitandloss (Profit & Loss statements)
+CREATE TABLE profitandloss (
     ticker TEXT,
     year INTEGER CHECK (year BETWEEN 2000 AND 2030),
     sales REAL CHECK (sales >= 0),
@@ -30,8 +57,8 @@ CREATE TABLE IF NOT EXISTS income_statements (
     FOREIGN KEY (ticker) REFERENCES companies (ticker) ON DELETE CASCADE
 );
 
--- 4. Table: balance_sheets (Balance Sheet statements)
-CREATE TABLE IF NOT EXISTS balance_sheets (
+-- 4. Table: balancesheet (Balance Sheet statements)
+CREATE TABLE balancesheet (
     ticker TEXT,
     year INTEGER CHECK (year BETWEEN 2000 AND 2030),
     total_assets REAL CHECK (total_assets >= 0),
@@ -42,8 +69,8 @@ CREATE TABLE IF NOT EXISTS balance_sheets (
     FOREIGN KEY (ticker) REFERENCES companies (ticker) ON DELETE CASCADE
 );
 
--- 5. Table: cash_flows (Cash Flow statements)
-CREATE TABLE IF NOT EXISTS cash_flows (
+-- 5. Table: cashflow (Cash Flow statements)
+CREATE TABLE cashflow (
     ticker TEXT,
     year INTEGER CHECK (year BETWEEN 2000 AND 2030),
     beginning_cash REAL,
@@ -54,7 +81,7 @@ CREATE TABLE IF NOT EXISTS cash_flows (
 );
 
 -- 6. Table: stock_prices (Daily prices)
-CREATE TABLE IF NOT EXISTS stock_prices (
+CREATE TABLE stock_prices (
     ticker TEXT,
     date TEXT NOT NULL,
     open REAL CHECK (open > 0),
@@ -66,8 +93,8 @@ CREATE TABLE IF NOT EXISTS stock_prices (
     FOREIGN KEY (ticker) REFERENCES companies (ticker) ON DELETE CASCADE
 );
 
--- 7. Table: ratios (Financial metrics)
-CREATE TABLE IF NOT EXISTS ratios (
+-- 7. Table: financial_ratios (Financial metrics)
+CREATE TABLE financial_ratios (
     ticker TEXT,
     year INTEGER CHECK (year BETWEEN 2000 AND 2030),
     pe_ratio REAL,
@@ -79,7 +106,7 @@ CREATE TABLE IF NOT EXISTS ratios (
 );
 
 -- 8. Table: corporate_actions (Dividends & Splits)
-CREATE TABLE IF NOT EXISTS corporate_actions (
+CREATE TABLE corporate_actions (
     action_id INTEGER PRIMARY KEY AUTOINCREMENT,
     ticker TEXT NOT NULL,
     date TEXT NOT NULL,
@@ -88,8 +115,44 @@ CREATE TABLE IF NOT EXISTS corporate_actions (
     FOREIGN KEY (ticker) REFERENCES companies (ticker) ON DELETE CASCADE
 );
 
--- 9. Table: validation_failures (Data Quality fail logs)
-CREATE TABLE IF NOT EXISTS validation_failures (
+-- 9. Table: analysis (Analyst rating and target price)
+CREATE TABLE analysis (
+    analysis_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ticker TEXT NOT NULL,
+    year INTEGER CHECK (year BETWEEN 2000 AND 2030),
+    rating TEXT CHECK (rating IN ('Buy', 'Hold', 'Sell')),
+    target_price REAL,
+    FOREIGN KEY (ticker) REFERENCES companies (ticker) ON DELETE CASCADE
+);
+
+-- 10. Table: documents (Annual and quarterly report file paths)
+CREATE TABLE documents (
+    document_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ticker TEXT NOT NULL,
+    document_name TEXT NOT NULL,
+    file_path TEXT,
+    FOREIGN KEY (ticker) REFERENCES companies (ticker) ON DELETE CASCADE
+);
+
+-- 11. Table: prosandcons (Pros and cons analysis)
+CREATE TABLE prosandcons (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ticker TEXT NOT NULL,
+    type TEXT CHECK (type IN ('Pro', 'Con')),
+    point TEXT NOT NULL,
+    FOREIGN KEY (ticker) REFERENCES companies (ticker) ON DELETE CASCADE
+);
+
+-- 12. Table: peer_groups (Peer group categorizations)
+CREATE TABLE peer_groups (
+    peer_group_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    group_name TEXT NOT NULL,
+    ticker TEXT NOT NULL,
+    FOREIGN KEY (ticker) REFERENCES companies (ticker) ON DELETE CASCADE
+);
+
+-- 13. Table: validation_failures (Data Quality fail logs)
+CREATE TABLE validation_failures (
     failure_id INTEGER PRIMARY KEY AUTOINCREMENT,
     company_ticker TEXT,
     file_name TEXT NOT NULL,
@@ -101,8 +164,8 @@ CREATE TABLE IF NOT EXISTS validation_failures (
     message TEXT
 );
 
--- 10. Table: load_audit (Database load trace logs)
-CREATE TABLE IF NOT EXISTS load_audit (
+-- 14. Table: load_audit (Database load trace logs)
+CREATE TABLE load_audit (
     load_id INTEGER PRIMARY KEY AUTOINCREMENT,
     load_timestamp TEXT DEFAULT (datetime('now', 'localtime')),
     file_name TEXT NOT NULL,
@@ -113,7 +176,7 @@ CREATE TABLE IF NOT EXISTS load_audit (
 );
 
 -- Indexes for performance optimization
-CREATE INDEX IF NOT EXISTS idx_stock_prices_ticker_date ON stock_prices (ticker, date);
-CREATE INDEX IF NOT EXISTS idx_income_statements_ticker ON income_statements (ticker);
-CREATE INDEX IF NOT EXISTS idx_balance_sheets_ticker ON balance_sheets (ticker);
-CREATE INDEX IF NOT EXISTS idx_cash_flows_ticker ON cash_flows (ticker);
+CREATE INDEX idx_stock_prices_ticker_date ON stock_prices (ticker, date);
+CREATE INDEX idx_profitandloss_ticker ON profitandloss (ticker);
+CREATE INDEX idx_balancesheet_ticker ON balancesheet (ticker);
+CREATE INDEX idx_cashflow_ticker ON cashflow (ticker);

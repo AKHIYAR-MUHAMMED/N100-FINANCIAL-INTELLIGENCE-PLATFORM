@@ -11,17 +11,25 @@ SELECT 'sectors' AS table_name, COUNT(*) AS row_count FROM sectors
 UNION ALL
 SELECT 'companies', COUNT(*) FROM companies
 UNION ALL
-SELECT 'income_statements', COUNT(*) FROM income_statements
+SELECT 'profitandloss', COUNT(*) FROM profitandloss
 UNION ALL
-SELECT 'balance_sheets', COUNT(*) FROM balance_sheets
+SELECT 'balancesheet', COUNT(*) FROM balancesheet
 UNION ALL
-SELECT 'cash_flows', COUNT(*) FROM cash_flows
+SELECT 'cashflow', COUNT(*) FROM cashflow
 UNION ALL
 SELECT 'stock_prices', COUNT(*) FROM stock_prices
 UNION ALL
-SELECT 'ratios', COUNT(*) FROM ratios
+SELECT 'financial_ratios', COUNT(*) FROM financial_ratios
 UNION ALL
 SELECT 'corporate_actions', COUNT(*) FROM corporate_actions
+UNION ALL
+SELECT 'analysis', COUNT(*) FROM analysis
+UNION ALL
+SELECT 'documents', COUNT(*) FROM documents
+UNION ALL
+SELECT 'prosandcons', COUNT(*) FROM prosandcons
+UNION ALL
+SELECT 'peer_groups', COUNT(*) FROM peer_groups
 UNION ALL
 SELECT 'validation_failures', COUNT(*) FROM validation_failures
 UNION ALL
@@ -66,13 +74,13 @@ SELECT
     ROUND(AVG(i.gross_profit), 2) AS avg_gross_profit,
     ROUND(AVG(i.net_income), 2) AS avg_net_income
 FROM companies c
-JOIN income_statements i ON c.ticker = i.ticker
+JOIN profitandloss i ON c.ticker = i.ticker
 GROUP BY c.sector_name
 ORDER BY avg_net_income DESC;
 
 -- ------------------------------------------------------------------------------
 -- Query 6: Balance Sheet Equation Discrepancies
--- Purpose: Identify any records where Assets != Liabilities + Equity (DQ-12 check).
+-- Purpose: Identify any records where Assets != Liabilities + Equity (DQ-04 check).
 -- ------------------------------------------------------------------------------
 SELECT 
     ticker, 
@@ -81,12 +89,12 @@ SELECT
     total_liabilities, 
     total_equity,
     ROUND(ABS(total_assets - (total_liabilities + total_equity)), 2) AS discrepancy
-FROM balance_sheets
-WHERE ABS(total_assets - (total_liabilities + total_equity)) > 1.0;
+FROM balancesheet
+WHERE ABS(total_assets - (total_liabilities + total_equity)) / total_assets >= 0.01;
 
 -- ------------------------------------------------------------------------------
 -- Query 7: Cash Flow Reconciliation Discrepancies
--- Purpose: Identify any records where End Cash != Start Cash + Net Change (DQ-13 check).
+-- Purpose: Identify any records where End Cash != Start Cash + Net Change (DQ-07 check).
 -- ------------------------------------------------------------------------------
 SELECT 
     ticker, 
@@ -95,7 +103,7 @@ SELECT
     ending_cash, 
     net_cash_flow,
     ROUND(ABS(ending_cash - (beginning_cash + net_cash_flow)), 2) AS discrepancy
-FROM cash_flows
+FROM cashflow
 WHERE ABS(ending_cash - (beginning_cash + net_cash_flow)) > 1.0;
 
 -- ------------------------------------------------------------------------------

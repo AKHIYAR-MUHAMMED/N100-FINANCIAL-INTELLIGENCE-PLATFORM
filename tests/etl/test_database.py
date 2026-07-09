@@ -24,10 +24,15 @@ def test_initialize_schema(temp_db_manager):
     # Verify core tables are present
     assert "companies" in table_names
     assert "sectors" in table_names
-    assert "income_statements" in table_names
-    assert "balance_sheets" in table_names
-    assert "cash_flows" in table_names
+    assert "profitandloss" in table_names
+    assert "balancesheet" in table_names
+    assert "cashflow" in table_names
     assert "stock_prices" in table_names
+    assert "financial_ratios" in table_names
+    assert "analysis" in table_names
+    assert "documents" in table_names
+    assert "prosandcons" in table_names
+    assert "peer_groups" in table_names
     assert "validation_failures" in table_names
     assert "load_audit" in table_names
 
@@ -73,7 +78,7 @@ def test_check_constraints(temp_db_manager):
 
     with pytest.raises(sqlite3.IntegrityError):
         temp_db_manager.execute_update(
-            "INSERT INTO income_statements (ticker, year, sales, opm) "
+            "INSERT INTO profitandloss (ticker, year, sales, opm) "
             "VALUES (?, ?, ?, ?);",
             ("TCS", 2026, 1000.0, 1.2),  # OPM must be between -1.0 and 1.0
         )

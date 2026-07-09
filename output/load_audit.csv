@@ -1,7 +1,7 @@
 file_name,records_processed,records_loaded,failures_count,status
 sectors.xlsx,5,5,0,SUCCESS
-companies.xlsx,92,92,0,SUCCESS
-income_statements.xlsx,1276,1276,2,SUCCESS
+companies.xlsx,92,92,1,SUCCESS
+income_statements.xlsx,1276,1276,3,SUCCESS
 balance_sheets.xlsx,1312,1312,1,SUCCESS
 cash_flows.xlsx,1187,1187,1,SUCCESS
 ratios.xlsx,1000,1000,0,SUCCESS

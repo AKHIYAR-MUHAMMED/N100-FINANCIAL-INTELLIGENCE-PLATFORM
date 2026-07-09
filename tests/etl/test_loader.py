@@ -95,9 +95,9 @@ def test_etl_loader_pipeline(tmp_path, monkeypatch):
     companies_count = db_manager.execute_query(
         "SELECT COUNT(*) as cnt FROM companies;"
     )[0]["cnt"]
-    pnl_count = db_manager.execute_query(
-        "SELECT COUNT(*) as cnt FROM income_statements;"
-    )[0]["cnt"]
+    pnl_count = db_manager.execute_query("SELECT COUNT(*) as cnt FROM profitandloss;")[
+        0
+    ]["cnt"]
     prices_count = db_manager.execute_query(
         "SELECT COUNT(*) as cnt FROM stock_prices;"
     )[0]["cnt"]

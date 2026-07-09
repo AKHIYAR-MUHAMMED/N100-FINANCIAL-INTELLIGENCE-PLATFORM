@@ -1,4 +1,4 @@
-.PHONY: setup install format lint test clean
+.PHONY: setup install format lint test clean load ratios report dashboard api
 
 VENV_BIN = venv/Scripts
 
@@ -30,3 +30,23 @@ clean:
 	@echo "Cleaning cache files..."
 	rm -rf .pytest_cache .mypy_cache .coverage htmlcov
 	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+
+load:
+	@echo "Running ETL Ingestion Loader..."
+	$(VENV_BIN)/python -m src.etl.loader
+
+ratios:
+	@echo "Running Financial Ratios Calculator..."
+	$(VENV_BIN)/python -m src.etl.ratios
+
+report:
+	@echo "Generating Ingestion and Data Quality Report..."
+	$(VENV_BIN)/python -m src.report
+
+dashboard:
+	@echo "Starting Dashboard & API Server at http://localhost:8000..."
+	$(VENV_BIN)/python -m src.api_server
+
+api:
+	@echo "Starting Dashboard & API Server at http://localhost:8000..."
+	$(VENV_BIN)/python -m src.api_server
