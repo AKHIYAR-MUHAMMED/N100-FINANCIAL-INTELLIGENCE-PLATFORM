@@ -53,24 +53,25 @@ def generate_mock_data():
     rows_pnl = []
     for i, ticker in enumerate(norm_tickers):
         years_to_add = 14 if i < 80 else 13
+        # Company-specific parameters
+        growth_rate = 0.05 + (i % 5) * 0.04
+        npm_factor = 0.05 + (i % 4) * 0.04
         for y_idx in range(years_to_add):
             year = 2010 + y_idx
 
             # Values
-            sales = 1000.0 + (i * 10) + (y_idx * 50)
-            op_profit = sales * 0.15
-            opm = 0.15
-            gp = sales * 0.4
-            net_inc = sales * 0.08
-            eps = net_inc / 100.0
-            shares = 100.0
+            sales = (500.0 + i * 40.0) * ((1.0 + growth_rate) ** y_idx)
+            op_profit = sales * 0.18
+            opm = 0.18
+            gp = sales * 0.40
+            net_inc = sales * npm_factor
+            eps = net_inc / (10.0 + (i % 4) * 10.0)
+            shares = 40.0
 
             # Intentionally add a warning case (DQ-10: non-positive sales) for COMP10 year 2010
-            # sales = 0.0 is a warning but allowed by database CHECK (sales >= 0)
             if ticker == "COMP10" and year == 2010:
                 sales = 0.0
             # Intentionally add a warning case (DQ-16: GP < OP) for COMP12 year 2012
-            # Accepted by database since it does not validate logical profit order
             if ticker == "COMP12" and year == 2012:
                 gp = 50.0
                 op_profit = 100.0
@@ -101,12 +102,21 @@ def generate_mock_data():
     rows_bs = []
     for i, ticker in enumerate(norm_tickers):
         years_to_add = 15 if i < 24 else 14
+        # Company-specific parameters
+        base_debt_ratio = 0.2 + (i % 3) * 0.2
+        if i % 6 == 0:
+            base_debt_ratio = 0.0
         for y_idx in range(years_to_add):
             year = 2010 + y_idx
 
-            assets = 5000.0 + (i * 100) + (y_idx * 200)
-            liabs = assets * 0.4
-            equity = assets * 0.6
+            # Decline slightly each year only for even indices
+            if i % 2 == 0:
+                debt_ratio = max(0.0, base_debt_ratio - y_idx * 0.01)
+            else:
+                debt_ratio = base_debt_ratio
+            assets = (1500.0 + i * 80.0) * (1.06 ** y_idx)
+            liabs = assets * debt_ratio
+            equity = assets * (1.0 - debt_ratio)
             retained = equity * 0.3
 
             # Intentionally add a warning case (DQ-12: Assets != Liab + Equity) for COMP20 year 2010
@@ -165,7 +175,7 @@ def generate_mock_data():
 
     for i, ticker in enumerate(norm_tickers):
         for d_idx, dt in enumerate(dates):
-            open_p = 100.0 + (i * 2) + (d_idx * 0.5)
+            open_p = 100.0 + (i * 7) + (d_idx * 0.5)
             high_p = open_p + 5.0
             low_p = open_p - 3.0
             close_p = open_p + 1.0
@@ -209,26 +219,39 @@ def generate_mock_data():
                 {
                     "ticker": ticker,
                     "year": year,
-                    "pe_ratio": 15.0 + (i * 0.1),
-                    "pb_ratio": 2.0 + (y_idx * 0.1),
+                    "pe_ratio": 10.0 + (i * 0.35),
+                    "pb_ratio": 1.0 + (i % 5) * 0.5 + (y_idx * 0.05),
                     "roe": 12.5 + (i * 0.05),
-                    "debt_to_equity": 0.5 + (y_idx * 0.02),
+                    "debt_to_equity": max(0.0, 1.0 - (y_idx * 0.05) + (i % 3) * 0.2) if i % 2 == 0 else 0.5 + (y_idx * 0.02),
                 }
             )
     df_ratios = pd.DataFrame(rows_ratios)
     df_ratios.to_excel(raw_dir / "ratios.xlsx", index=False)
 
     # 11. corporate_actions.xlsx (Supplementary 4)
-    # Target: 50 rows
+    # Generate annual dividends from 2010 to 2024 for all companies to ensure realistic yield
     rows_corp = []
-    for i in range(50):
-        ticker = norm_tickers[i % len(norm_tickers)]
-        dt = f"2026-02-{(i % 28) + 1:02d}"
-        action_type = "Dividend" if i % 2 == 0 else "Split"
-        val = 2.5 if action_type == "Dividend" else 2.0
-        rows_corp.append(
-            {"ticker": ticker, "date": dt, "action_type": action_type, "value": val}
-        )
+    for i, ticker in enumerate(norm_tickers):
+        for year in range(2010, 2025):
+            dt = f"{year}-06-{(i % 28) + 1:02d}"
+            rows_corp.append(
+                {
+                    "ticker": ticker,
+                    "date": dt,
+                    "action_type": "Dividend",
+                    "value": (2.0 + (i * 0.15) + (i % 5) * 0.5) if i % 2 == 0 else 0.5
+                }
+            )
+            # Add some split actions
+            if year == 2018 and i % 10 == 0:
+                rows_corp.append(
+                    {
+                        "ticker": ticker,
+                        "date": f"{year}-09-15",
+                        "action_type": "Split",
+                        "value": 2.0
+                    }
+                )
     df_corp = pd.DataFrame(rows_corp)
     df_corp.to_excel(raw_dir / "corporate_actions.xlsx", index=False)
 

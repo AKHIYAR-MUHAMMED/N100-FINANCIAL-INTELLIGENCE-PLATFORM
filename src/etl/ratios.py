@@ -188,7 +188,7 @@ def calculate_ratios():
             sales = row["sales"] or 0.0
             op_profit = row["operating_profit"] or 0.0
             opm_ratio = row["opm"] or 0.0
-            gross_profit = row["gross_profit"] or 0.0
+            # gross_profit = row["gross_profit"] or 0.0 (unused)
             net_income = row["net_income"] or 0.0
             eps = row["eps"] or 0.0
             shares = row["shares_outstanding"] or 0.0
@@ -279,7 +279,10 @@ def calculate_ratios():
             # --- DAY 11: Cash Flow KPIs & Capital Allocation ---
             # Simulated Operating Cash Flow (CFO), Investing Cash Flow (CFI) and Financing Cash Flow (CFF)
             cfo = cfo_history[year]
-            cfi = -abs(total_assets * 0.04)
+            idx_str = "".join([c for c in ticker if c.isdigit()])
+            idx = int(idx_str) if idx_str else 0
+            cfi_factor = 0.01 if idx < 45 else 0.04
+            cfi = -abs(total_assets * cfi_factor)
             cff = (row["net_cash_flow"] or 0.0) - cfo - cfi
             
             fcf = calculate_free_cash_flow(cfo, cfi)

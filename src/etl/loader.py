@@ -365,16 +365,22 @@ class ETLLoader:
             df_pro_con.to_sql("prosandcons", conn, if_exists="append", index=False)
 
             # Populate peer_groups table
-            peer_data = []
-            for i, t in enumerate(tickers[:10]):
-                group_name = (
-                    "Nifty Top Tech Peers"
-                    if i % 2 == 0
-                    else "Nifty Top Financial Peers"
-                )
-                peer_data.append({"group_name": group_name, "ticker": t})
-            df_peers = pd.DataFrame(peer_data)
-            df_peers.to_sql("peer_groups", conn, if_exists="append", index=False)
+            peer_xlsx = self.raw_dir / "peer_groups.xlsx"
+            if peer_xlsx.is_file():
+                df_peers_raw = pd.read_excel(peer_xlsx)
+                df_peers = df_peers_raw[["group_name", "ticker"]].copy()
+                df_peers.to_sql("peer_groups", conn, if_exists="append", index=False)
+            else:
+                peer_data = []
+                for i, t in enumerate(tickers[:10]):
+                    group_name = (
+                        "Nifty Top Tech Peers"
+                        if i % 2 == 0
+                        else "Nifty Top Financial Peers"
+                    )
+                    peer_data.append({"group_name": group_name, "ticker": t})
+                df_peers = pd.DataFrame(peer_data)
+                df_peers.to_sql("peer_groups", conn, if_exists="append", index=False)
 
             conn.commit()
             print(
