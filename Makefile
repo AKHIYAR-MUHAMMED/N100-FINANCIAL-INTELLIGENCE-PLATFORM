@@ -1,4 +1,4 @@
-.PHONY: setup install format lint test clean load ratios report dashboard api
+.PHONY: setup install format lint test clean load ratios screener peer report dashboard api
 
 VENV_BIN = venv/Scripts
 
@@ -38,6 +38,14 @@ load:
 ratios:
 	@echo "Running Financial Ratios Calculator..."
 	$(VENV_BIN)/python -m src.etl.ratios
+
+screener:
+	@echo "Running Stock Screener Engine..."
+	$(VENV_BIN)/python -m src.screener.engine
+
+peer:
+	@echo "Running Peer & Competitor Analyzer..."
+	$(VENV_BIN)/python -m src.analytics.peer
 
 report:
 	@echo "Generating Ingestion and Data Quality Report..."
