@@ -1,4 +1,4 @@
-.PHONY: setup install format lint test clean load ratios screener peer report dashboard api
+.PHONY: setup install format lint test clean load ratios screener peer report dashboard api streamlit valuation
 
 VENV_BIN = venv/Scripts
 
@@ -58,3 +58,11 @@ dashboard:
 api:
 	@echo "Starting Dashboard & API Server at http://localhost:8000..."
 	$(VENV_BIN)/python -m src.api_server
+
+streamlit:
+	@echo "Starting 8-screen Streamlit Dashboard at http://localhost:8501..."
+	$(VENV_BIN)/streamlit run src/dashboard/app.py
+
+valuation:
+	@echo "Running Valuation Engine..."
+	$(VENV_BIN)/python -m src.analytics.valuation

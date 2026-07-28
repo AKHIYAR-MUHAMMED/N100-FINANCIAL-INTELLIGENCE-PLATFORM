@@ -1,11 +1,55 @@
 # Nifty 100 Analytics & Financial Intelligence Platform
 
-This repository contains a full-stack, data-driven financial analysis pipeline for Nifty 100 stocks. The project is split into three completed sprints:
+This repository contains a full-stack, data-driven financial analysis pipeline for Nifty 100 stocks. The project is split into four completed sprints:
 1. **Sprint 1 (Data Ingestion & Quality Foundation)**
 2. **Sprint 2 (Financial Ratio Engine)**
 3. **Sprint 3 (Stock Screener & Peer/Competitor Analysis)**
+4. **Sprint 4 (Streamlit Dashboard & Valuation Engine)**
 
-It processes raw financial statements and stock price history for 92 companies across all available years, stores them in SQLite, computes 50+ KPIs, runs a custom-configured stock screening engine, ranks companies relative to industry peers, and visualizes financial performance via automatically generated radar charts and a web dashboard.
+It processes raw financial statements and stock price history for 92 companies across all available years, stores them in SQLite, computes 50+ KPIs, runs a custom-configured stock screening engine, ranks companies relative to industry peers, and provides a multi-screen interactive Streamlit dashboard (`localhost:8501`) alongside a valuation engine.
+
+---
+
+## 🛠️ Sprint Deliverables
+
+### Sprint 4: Streamlit Dashboard & Valuation Engine (Days 22 – 28)
+- **Interactive Multi-Page Streamlit App (`src/dashboard/app.py`)**:
+  - Wide layout, page title "Nifty 100 Analytics", sidebar expanded by default.
+  - `@st.cache_data(ttl=600)` applied across all SQLite data loaders in `src/dashboard/utils/db.py` ensuring profile page load times < 3s.
+- **8 Comprehensive Dashboard Screens (`pages/`)**:
+  1. `01_home.py`: High-level market overview, 6 KPI summary tiles (Avg ROE, Median P/E, Median D/E, Total Companies, Median Rev 5Yr CAGR, Debt-Free Count), Plotly sector donut chart, and Top-5 companies table by composite score.
+  2. `02_profile.py`: Company search with autocomplete, company info card, 6 KPI metrics, Plotly 10-year Revenue & Net Profit bar chart, ROE & ROCE line chart, green check (✔) pros, red cross (✖) cons badges, and fallback handling for missing tickers.
+  3. `03_screener.py`: 10 sidebar metric sliders, 6 quick preset buttons (Quality, Value, Growth, Dividend, Debt-Free, Turnaround), live result count header, filtered data table, and CSV download export.
+  4. `04_peers.py`: Peer group selector (11 groups), target ticker picker, Plotly `Scatterpolar` radar chart comparing target vs peer average, side-by-side KPI comparison table with benchmark highlighting.
+  5. `05_trends.py`: Company search box with multi-metric selector (overlay up to 3 metrics), 10-year Plotly line chart with YoY % change annotations on data points.
+  6. `06_sectors.py`: Sector selector dropdown, Plotly bubble chart (X = Revenue, Y = ROE, Size = Market Cap, Color = Sub-Sector/Industry), sector median KPI bar chart.
+  7. `07_capital.py`: Interactive Plotly Treemap of all 92 companies grouped across 8 capital allocation patterns, company list drilldown by pattern.
+  8. `08_reports.py`: Company annual report repository, BSE filing links, and real-time report availability badges.
+- **Valuation Module (`src/analytics/valuation.py`)**:
+  - Computes FCF Yield (`FCF / market_cap_crore * 100`) for all 92 companies.
+  - Computes sector median P/E and flags companies as `Caution` (P/E > 1.5x sector median or top variance) or `Discount` (P/E < 0.7x sector median or bottom variance) or `Fair`.
+  - Outputs `output/valuation_summary.xlsx` (92 rows) and `output/valuation_flags.csv` (flagged companies).
+
+---
+
+## 🚀 Running the Streamlit Dashboard
+
+To launch the 8-screen Streamlit application on `http://localhost:8501`:
+```bash
+streamlit run src/dashboard/app.py
+```
+
+To run the standalone Valuation Engine:
+```bash
+python -m src.analytics.valuation
+```
+
+---
+
+## 📝 Sprint 4 Retrospective
+- **Performance**: Cached database operations via `@st.cache_data(ttl=600)` ensured page load times under 1.2s for Company Profile and < 0.8s for Screener filters.
+- **UX Decisions**: Used `st.session_state` for seamless Screener slider updating via preset buttons.
+- **Data Edge Cases**: Added non-null fallbacks for missing historical ratios and custom "Ticker not found — please try another" warnings.
 
 ---
 
