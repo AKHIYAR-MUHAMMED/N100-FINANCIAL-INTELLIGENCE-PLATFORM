@@ -9,6 +9,15 @@ DEFAULT_DB_PATH = PROJECT_ROOT / "data" / "db" / "nifty100.db"
 
 
 def get_connection(db_path: Path = DEFAULT_DB_PATH) -> sqlite3.Connection:
+    """
+    Establishes and returns an active SQLite database connection.
+
+    Args:
+        db_path (Path): Path to the SQLite database file (defaults to data/db/nifty100.db).
+
+    Returns:
+        sqlite3.Connection: Database connection object configured with sqlite3.Row row_factory.
+    """
     if not db_path.exists():
         # Fallback if relative to current working directory
         db_path = Path("data/db/nifty100.db")
@@ -19,7 +28,15 @@ def get_connection(db_path: Path = DEFAULT_DB_PATH) -> sqlite3.Connection:
 
 @st.cache_data(ttl=600)
 def get_companies() -> pd.DataFrame:
-    """Fetch all 92 companies with sector details."""
+    """
+    Fetches master metadata for all 92 Nifty 100 constituent companies from the database.
+
+    Caching:
+        Cached via Streamlit @st.cache_data with Time-To-Live (TTL) of 600 seconds.
+
+    Returns:
+        pd.DataFrame: Contains columns ['ticker', 'name', 'sector_name', 'industry', 'website'].
+    """
     conn = get_connection()
     try:
         query = """
@@ -40,7 +57,16 @@ def get_companies() -> pd.DataFrame:
 
 @st.cache_data(ttl=600)
 def get_ratios(ticker: str = None, year: int = None) -> pd.DataFrame:
-    """Fetch financial ratios data with optional ticker and year filter."""
+    """
+    Fetches financial ratios and computed KPIs for companies, supporting optional filtering by ticker and year.
+
+    Args:
+        ticker (str, optional): Target company ticker symbol (e.g. 'COMP01'). Defaults to None (all companies).
+        year (int, optional): Financial year to query (e.g. 2023). Defaults to None (all years).
+
+    Returns:
+        pd.DataFrame: DataFrame containing PE, PB, ROE, ROCE, D/E, FCF, CAGRs, and composite scores.
+    """
     conn = get_connection()
     try:
         query = """
@@ -69,7 +95,15 @@ def get_ratios(ticker: str = None, year: int = None) -> pd.DataFrame:
 
 @st.cache_data(ttl=600)
 def get_pl(ticker: str = None) -> pd.DataFrame:
-    """Fetch Profit & Loss statement data."""
+    """
+    Fetches Profit & Loss (Income Statement) historical data for companies.
+
+    Args:
+        ticker (str, optional): Target company ticker symbol. Defaults to None (all companies).
+
+    Returns:
+        pd.DataFrame: Contains Sales, Operating Profit, OPM, Gross Profit, Net Income, EPS, and Shares.
+    """
     conn = get_connection()
     try:
         query = """
@@ -91,7 +125,15 @@ def get_pl(ticker: str = None) -> pd.DataFrame:
 
 @st.cache_data(ttl=600)
 def get_bs(ticker: str = None) -> pd.DataFrame:
-    """Fetch Balance Sheet statement data."""
+    """
+    Fetches Balance Sheet historical statement records for companies.
+
+    Args:
+        ticker (str, optional): Target company ticker symbol. Defaults to None (all companies).
+
+    Returns:
+        pd.DataFrame: Contains Total Assets, Total Liabilities, Total Equity, and Retained Earnings.
+    """
     conn = get_connection()
     try:
         query = """
@@ -113,7 +155,15 @@ def get_bs(ticker: str = None) -> pd.DataFrame:
 
 @st.cache_data(ttl=600)
 def get_cf(ticker: str = None) -> pd.DataFrame:
-    """Fetch Cash Flow statement data."""
+    """
+    Fetches Cash Flow historical statement records for companies.
+
+    Args:
+        ticker (str, optional): Target company ticker symbol. Defaults to None (all companies).
+
+    Returns:
+        pd.DataFrame: Contains Beginning Cash, Ending Cash, and Net Cash Flow.
+    """
     conn = get_connection()
     try:
         query = """
@@ -135,7 +185,12 @@ def get_cf(ticker: str = None) -> pd.DataFrame:
 
 @st.cache_data(ttl=600)
 def get_sectors() -> pd.DataFrame:
-    """Fetch sector information with company counts."""
+    """
+    Fetches broad sector details aggregated with constituent company counts.
+
+    Returns:
+        pd.DataFrame: Contains ['sector_name', 'sector_description', 'company_count'].
+    """
     conn = get_connection()
     try:
         query = """
@@ -156,7 +211,15 @@ def get_sectors() -> pd.DataFrame:
 
 @st.cache_data(ttl=600)
 def get_peers(group_name: str = None) -> pd.DataFrame:
-    """Fetch peer group mappings."""
+    """
+    Fetches peer group mappings and member companies.
+
+    Args:
+        group_name (str, optional): Specific peer group name (e.g. 'IT Services'). Defaults to None.
+
+    Returns:
+        pd.DataFrame: Contains ['group_name', 'ticker', 'company_name', 'sector_name'].
+    """
     conn = get_connection()
     try:
         query = """
@@ -182,7 +245,15 @@ def get_peers(group_name: str = None) -> pd.DataFrame:
 
 @st.cache_data(ttl=600)
 def get_valuation(ticker: str = None) -> pd.DataFrame:
-    """Fetch valuation parameters and calculated multiples."""
+    """
+    Fetches valuation parameters including P/E, P/B, FCF, Net Income, and latest close price.
+
+    Args:
+        ticker (str, optional): Target company ticker symbol. Defaults to None.
+
+    Returns:
+        pd.DataFrame: Merged financial metrics and market price data for valuation modeling.
+    """
     conn = get_connection()
     try:
         query = """
@@ -224,7 +295,15 @@ def get_valuation(ticker: str = None) -> pd.DataFrame:
 
 @st.cache_data(ttl=600)
 def get_pros_cons(ticker: str) -> pd.DataFrame:
-    """Fetch pros and cons for a given company ticker."""
+    """
+    Fetches Qualitative Pros and Cons investment thesis points for a target company.
+
+    Args:
+        ticker (str): Target company ticker symbol (e.g. 'COMP01').
+
+    Returns:
+        pd.DataFrame: Contains ['type', 'point'] where type is 'Pro' or 'Con'.
+    """
     conn = get_connection()
     try:
         query = "SELECT type, point FROM prosandcons WHERE UPPER(ticker) = UPPER(?)"
@@ -236,7 +315,15 @@ def get_pros_cons(ticker: str) -> pd.DataFrame:
 
 @st.cache_data(ttl=600)
 def get_documents(ticker: str) -> pd.DataFrame:
-    """Fetch documents/annual reports for a given company ticker."""
+    """
+    Fetches filing metadata and document paths for annual reports of a target company.
+
+    Args:
+        ticker (str): Target company ticker symbol.
+
+    Returns:
+        pd.DataFrame: Contains ['document_name', 'file_path'].
+    """
     conn = get_connection()
     try:
         query = "SELECT document_name, file_path FROM documents WHERE UPPER(ticker) = UPPER(?)"
@@ -248,7 +335,12 @@ def get_documents(ticker: str) -> pd.DataFrame:
 
 @st.cache_data(ttl=600)
 def get_capital_allocation() -> pd.DataFrame:
-    """Fetch latest capital allocation patterns for all companies."""
+    """
+    Fetches the latest capital allocation pattern classifications for all companies.
+
+    Returns:
+        pd.DataFrame: Contains ['company_id', 'company_name', 'sector', 'capital_allocation_pattern', 'composite_quality_score', 'year'].
+    """
     conn = get_connection()
     try:
         query = """

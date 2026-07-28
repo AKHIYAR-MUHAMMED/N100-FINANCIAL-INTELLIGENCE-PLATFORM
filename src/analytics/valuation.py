@@ -11,20 +11,47 @@ MARKET_CAP_PATH = PROJECT_ROOT / "data" / "raw" / "market_cap.xlsx"
 
 
 class ValuationEngine:
+    """
+    Valuation Engine for computing FCF Yield, Sector Median P/E multiples, 5-year Median P/E,
+    and classifying companies into valuation status flags (Caution, Discount, Fair).
+    """
+
     def __init__(self, db_path: Path = DB_PATH, output_dir: Path = OUTPUT_DIR):
+        """
+        Initializes the Valuation Engine with database and output file paths.
+
+        Args:
+            db_path (Path): Path to SQLite database nifty100.db.
+            output_dir (Path): Output directory path for Excel and CSV artifacts.
+        """
         self.db_path = db_path
         self.output_dir = output_dir
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def get_connection(self) -> sqlite3.Connection:
+        """
+        Creates and returns an active SQLite database connection.
+
+        Returns:
+            sqlite3.Connection: Connection object to nifty100.db.
+        """
         return sqlite3.connect(self.db_path)
 
     def load_or_create_market_cap_data(self) -> pd.DataFrame:
-        """Loads market_cap.xlsx or computes market cap from shares_outstanding and close price."""
+        """
+        Loads pre-existing market_cap.xlsx data or calculates market capitalization in ₹ Crores
+        from shares outstanding and latest closing prices stored in the database.
+
+        Formula:
+            Market Cap (₹ Cr) = Shares Outstanding * Latest Close Price
+
+        Returns:
+            pd.DataFrame: Contains ['company_id', 'company_name', 'sector', 'market_cap_crore'].
+        """
         if MARKET_CAP_PATH.exists():
             return pd.read_excel(MARKET_CAP_PATH)
         
-        # Query from DB to compute market cap
+        # Query database to calculate market capitalization
         conn = self.get_connection()
         try:
             query = """
@@ -49,13 +76,12 @@ class ValuationEngine:
             """
             df = pd.read_sql_query(query, conn)
             
-            # Compute market cap in Cr: (shares_outstanding * latest_close)
-            # If shares_outstanding missing, fall back to 40.0 * latest_close
+            # Fallback values if missing
             df["shares_outstanding"] = df["shares_outstanding"].fillna(40.0)
             df["latest_close"] = df["latest_close"].fillna(150.0)
             df["market_cap_crore"] = df["shares_outstanding"] * df["latest_close"]
             
-            # Save market_cap.xlsx for future loads
+            # Save market_cap.xlsx for future pipeline loads
             MARKET_CAP_PATH.parent.mkdir(parents=True, exist_ok=True)
             df[["company_id", "company_name", "sector", "market_cap_crore"]].to_excel(MARKET_CAP_PATH, index=False)
             return df[["company_id", "company_name", "sector", "market_cap_crore"]]
@@ -63,10 +89,25 @@ class ValuationEngine:
             conn.close()
 
     def run_valuation_analysis(self) -> pd.DataFrame:
-        """Computes FCF yield, sector median P/E, 5-yr median P/E, and overvaluation flags."""
+        """
+        Executes full valuation pipeline across all 92 companies:
+          1. Computes FCF Yield (%): (Free Cash Flow / Market Cap) * 100
+          2. Computes EV/EBITDA multiple estimation
+          3. Computes 5-Year Median P/E for each company
+          4. Computes Sector Median P/E for each broad sector in the latest financial year
+          5. Computes P/E vs. Sector Median percentage variance
+          6. Assigns valuation flags:
+             - 'Caution': P/E > 1.5x Sector Median OR top sector variance (+15%)
+             - 'Discount': P/E < 0.7x Sector Median OR bottom sector variance (-10%)
+             - 'Fair': Trading within reasonable median bandwidths
+          7. Exports output/valuation_summary.xlsx (92 rows) and output/valuation_flags.csv.
+
+        Returns:
+            pd.DataFrame: Complete valuation summary DataFrame with required 10 columns.
+        """
         conn = self.get_connection()
         try:
-            # Fetch latest ratio data
+            # Fetch latest financial ratios history
             query_ratios = """
                 SELECT 
                     fr.ticker as company_id,
@@ -81,10 +122,10 @@ class ValuationEngine:
             """
             df_ratios = pd.read_sql_query(query_ratios, conn)
             
-            # Load market cap
+            # Load or calculate market cap
             df_mcap = self.load_or_create_market_cap_data()
             
-            # Latest year ratio per company
+            # Extract latest year record for each company
             latest_year_map = df_ratios.groupby("company_id")["year"].max().to_dict()
             df_latest = df_ratios[df_ratios.apply(lambda r: r["year"] == latest_year_map[r["company_id"]], axis=1)].copy()
             
@@ -92,13 +133,13 @@ class ValuationEngine:
             df_val = pd.merge(df_latest, df_mcap[["company_id", "market_cap_crore"]], on="company_id", how="left")
             df_val["market_cap_crore"] = df_val["market_cap_crore"].fillna(5000.0)
             
-            # Compute FCF yield (%): FCF / market_cap_crore * 100
+            # Compute FCF yield (%): (FCF / market_cap_crore) * 100
             df_val["FCF_yield_pct"] = (df_val["free_cash_flow_cr"] / df_val["market_cap_crore"]) * 100.0
             
-            # Compute EV/EBITDA surrogate or estimate: (P/E * 0.65)
+            # Estimate EV/EBITDA multiple
             df_val["EV/EBITDA"] = df_val["P/E"] * 0.68
             
-            # Compute 5yr median P/E per company
+            # Compute 5-year median P/E per company
             df_5yr = df_ratios[df_ratios["year"] >= (df_ratios["year"].max() - 5)]
             median_5yr_pe = df_5yr.groupby("company_id")["P/E"].median().to_dict()
             df_val["5yr_median_PE"] = df_val["company_id"].map(median_5yr_pe)
@@ -107,13 +148,10 @@ class ValuationEngine:
             sector_median_pe = df_latest.groupby("sector")["P/E"].median().to_dict()
             df_val["sector_median_PE"] = df_val["sector"].map(sector_median_pe)
             
-            # Compute PE vs sector median %
+            # Compute PE vs sector median percentage variance
             df_val["PE_vs_sector_median_pct"] = ((df_val["P/E"] - df_val["sector_median_PE"]) / df_val["sector_median_PE"]) * 100.0
             
-            # Apply overvaluation flags:
-            # if P/E > sector_median * 1.5 -> Caution
-            # if P/E < sector_median * 0.7 -> Discount
-            # otherwise -> Fair
+            # Valuation flagging classifier logic
             def flag_valuation(row):
                 pe = row["P/E"]
                 sec_med = row["sector_median_PE"]
@@ -129,8 +167,7 @@ class ValuationEngine:
 
             df_val["flag"] = df_val.apply(flag_valuation, axis=1)
             
-            # Required output columns:
-            # company_id, company_name, sector, P/E, P/B, EV/EBITDA, FCF_yield_pct, 5yr_median_PE, PE_vs_sector_median_pct, flag
+            # Required output columns schema
             required_cols = [
                 "company_id", "company_name", "sector", "P/E", "P/B", 
                 "EV/EBITDA", "FCF_yield_pct", "5yr_median_PE", 
