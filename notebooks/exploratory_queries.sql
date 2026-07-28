@@ -1,11 +1,22 @@
 -- ==============================================================================
--- NIFTY 100 EXPLORATORY QUERIES
--- This file contains 10 SQL queries for exploring, validating, and auditing the database.
+-- NIFTY 100 FINANCIAL INTELLIGENCE PLATFORM: EXPLORATORY & AUDIT SQL SUITE
+-- 
+-- Purpose:
+--   Comprehensive repository of SQL exploratory, data quality (DQ), financial statement
+--   reconciliation, and data integrity audit queries for the Nifty 100 SQLite database (nifty100.db).
+--
+-- Target Schema Tables:
+--   - sectors, companies, profitandloss, balancesheet, cashflow, stock_prices,
+--     financial_ratios, corporate_actions, analysis, documents, prosandcons,
+--     peer_groups, validation_failures, load_audit.
 -- ==============================================================================
 
 -- ------------------------------------------------------------------------------
--- Query 1: Database Table Row Counts
--- Purpose: Verify that all tables contain the expected number of records.
+-- Query 1: Database Table Row Counts & Ingestion Integrity Verification
+-- Purpose:
+--   Aggregates total record counts across all 14 schema tables using a set of UNION ALL queries.
+--   Enables data engineers and analysts to instantly verify database load completeness
+--   against raw Excel row counts and ETL load audit logs.
 -- ------------------------------------------------------------------------------
 SELECT 'sectors' AS table_name, COUNT(*) AS row_count FROM sectors
 UNION ALL
@@ -36,17 +47,23 @@ UNION ALL
 SELECT 'load_audit', COUNT(*) FROM load_audit;
 
 -- ------------------------------------------------------------------------------
--- Query 2: Sector Breakdown
--- Purpose: Get the distribution of companies across different sectors.
+-- Query 2: Sector Distribution & Industry Diversification Audit
+-- Purpose:
+--   Calculates company counts per broad sector to monitor market coverage, sectoral concentration,
+--   and ensure proper categorization across consumer, energy, financials, healthcare, and technology.
 -- ------------------------------------------------------------------------------
-SELECT sector_name, COUNT(*) AS company_count
+SELECT 
+    sector_name, 
+    COUNT(*) AS company_count
 FROM companies
 GROUP BY sector_name
 ORDER BY company_count DESC;
 
 -- ------------------------------------------------------------------------------
--- Query 3: NULL Value Check on Critical Columns
--- Purpose: Check if there are any NULL values in primary key or critical columns.
+-- Query 3: NULL Value & Primary Key Integrity Check on Company Metadata
+-- Purpose:
+--   Performs a conditional null-check aggregation over critical company metadata fields
+--   (ticker, company name, sector_name). Expects 0 nulls for clean primary key enforcement.
 -- ------------------------------------------------------------------------------
 SELECT 
     SUM(CASE WHEN ticker IS NULL THEN 1 ELSE 0 END) AS null_ticker_companies,
@@ -55,17 +72,24 @@ SELECT
 FROM companies;
 
 -- ------------------------------------------------------------------------------
--- Query 4: Duplicate Primary Key Check on Stock Prices
--- Purpose: Ensure that there are no duplicate entries for the same ticker on the same date.
+-- Query 4: Duplicate Primary Key & Composite Key Check on Daily Stock Prices
+-- Purpose:
+--   Groups daily stock price records by (ticker, date) composite primary key to identify
+--   duplicate daily trading records. Returns empty set if PK uniqueness is clean.
 -- ------------------------------------------------------------------------------
-SELECT ticker, date, COUNT(*) AS record_count
+SELECT 
+    ticker, 
+    date, 
+    COUNT(*) AS record_count
 FROM stock_prices
 GROUP BY ticker, date
 HAVING record_count > 1;
 
 -- ------------------------------------------------------------------------------
--- Query 5: Average Financial Metrics by Sector
--- Purpose: Calculate average Sales, Gross Profit, and Net Income per sector.
+-- Query 5: Sectoral Financial Performance Aggregation & Profitability Benchmarking
+-- Purpose:
+--   Computes average Sales (Revenue), Gross Profit, and Net Income across broad sectors by joining
+--   the companies metadata table with profitandloss statement history. Orders by average net income.
 -- ------------------------------------------------------------------------------
 SELECT 
     c.sector_name,
@@ -79,8 +103,10 @@ GROUP BY c.sector_name
 ORDER BY avg_net_income DESC;
 
 -- ------------------------------------------------------------------------------
--- Query 6: Balance Sheet Equation Discrepancies
--- Purpose: Identify any records where Assets != Liabilities + Equity (DQ-04 check).
+-- Query 6: Balance Sheet Fundamental Accounting Identity Audit (DQ-04 Rule)
+-- Purpose:
+--   Validates the fundamental accounting identity: Total Assets = Total Liabilities + Total Equity.
+--   Flags records with relative discrepancy >= 1.0% (0.01) for data quality investigation.
 -- ------------------------------------------------------------------------------
 SELECT 
     ticker, 
@@ -93,8 +119,10 @@ FROM balancesheet
 WHERE ABS(total_assets - (total_liabilities + total_equity)) / total_assets >= 0.01;
 
 -- ------------------------------------------------------------------------------
--- Query 7: Cash Flow Reconciliation Discrepancies
--- Purpose: Identify any records where End Cash != Start Cash + Net Change (DQ-07 check).
+-- Query 7: Cash Flow Statement Reconciliation Audit (DQ-07 Rule)
+-- Purpose:
+--   Validates cash flow balance reconciliation equation: Ending Cash = Beginning Cash + Net Cash Flow.
+--   Flags records with absolute difference exceeding ₹1 Crore for DQ investigation.
 -- ------------------------------------------------------------------------------
 SELECT 
     ticker, 
@@ -107,8 +135,10 @@ FROM cashflow
 WHERE ABS(ending_cash - (beginning_cash + net_cash_flow)) > 1.0;
 
 -- ------------------------------------------------------------------------------
--- Query 8: Stock Prices Statistics
--- Purpose: Get min, max, average close prices, and average volumes for companies.
+-- Query 8: Stock Price Trading Volatility & Volume Summary Statistics
+-- Purpose:
+--   Calculates 52-week/historical price ranges (Min Low, Max High, Average Close) and average daily
+--   trading volume across Nifty 100 constituents for liquidity assessment.
 -- ------------------------------------------------------------------------------
 SELECT 
     ticker,
@@ -122,17 +152,24 @@ GROUP BY ticker
 LIMIT 10;
 
 -- ------------------------------------------------------------------------------
--- Query 9: Validation Warnings Count by Rule ID
--- Purpose: Aggregate validator failures by Rule ID to see which rule was violated most.
+-- Query 9: Data Quality Validation Failure Frequency Analysis
+-- Purpose:
+--   Groups validation failures logged in validation_failures table by Rule ID and Severity
+--   (CRITICAL vs WARNING) to rank top data quality failure modes across dataset files.
 -- ------------------------------------------------------------------------------
-SELECT rule_id, severity, COUNT(*) AS failure_count
+SELECT 
+    rule_id, 
+    severity, 
+    COUNT(*) AS failure_count
 FROM validation_failures
 GROUP BY rule_id, severity
 ORDER BY failure_count DESC;
 
 -- ------------------------------------------------------------------------------
--- Query 10: Corporate Actions Summary
--- Purpose: Get count and average values of dividend distributions and stock splits.
+-- Query 10: Corporate Actions Aggregation (Dividends & Stock Splits)
+-- Purpose:
+--   Summarizes corporate action occurrences and average values split by action type (Dividend vs Split),
+--   providing corporate payout historical insights across portfolio companies.
 -- ------------------------------------------------------------------------------
 SELECT 
     action_type, 
