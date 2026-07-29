@@ -1,0 +1,447 @@
+company_id,type,rule_id,text,confidence_pct
+COMP01,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP01,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP01,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP01,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP02,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP02,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP02,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP02,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP03,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP03,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP03,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP03,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP04,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP04,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP04,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP04,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP04,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP04,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP05,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP05,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP05,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP05,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP05,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP05,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP05,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP06,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP06,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP06,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP06,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP07,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP07,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP07,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP07,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP08,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP08,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP08,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP09,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP09,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP09,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP09,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP09,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP09,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP10,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP10,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP10,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP10,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP10,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP10,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP10,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP11,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP11,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP11,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP11,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP12,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP12,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP12,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP13,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP13,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP13,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP13,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP14,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP14,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP14,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP14,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP14,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP14,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP15,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP15,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP15,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP15,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP15,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP15,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP15,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP16,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP16,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP16,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP16,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP17,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP17,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP17,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP17,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP18,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP18,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP18,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP19,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP19,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP19,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP19,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP19,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP19,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP20,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP20,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP20,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP20,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP20,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP20,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP20,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP21,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP21,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP21,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP21,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP22,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP22,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP22,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP22,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP23,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP23,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP23,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP23,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP23,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP24,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP24,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP24,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP24,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP24,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP25,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP25,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP25,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP25,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP25,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP25,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP26,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP26,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP26,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP26,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP27,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP27,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP27,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP27,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP28,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP28,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP28,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP28,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP29,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP29,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP29,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP29,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP29,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP29,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP30,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP30,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP30,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP30,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP30,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP30,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP30,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP31,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP31,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP31,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP31,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP32,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP32,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP32,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP33,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP33,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP33,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP33,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP34,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP34,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP34,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP34,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP34,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP34,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP35,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP35,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP35,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP35,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP35,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP35,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP35,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP36,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP36,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP36,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP36,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP37,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP37,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP37,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP37,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP38,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP38,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP38,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP39,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP39,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP39,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP39,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP39,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP39,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP40,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP40,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP40,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP40,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP40,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP40,pro,PRO_RULE_11,Revenue growing slower than profits shows improving operating leverage and scale benefits,80
+COMP40,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP40,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP41,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP41,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP41,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP41,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP42,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP42,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP42,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP43,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP43,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP43,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP43,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP44,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP44,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP44,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP44,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP44,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP44,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP45,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP45,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP45,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP45,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP45,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP45,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP45,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP46,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP46,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP46,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP46,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP47,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP47,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP47,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP47,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP48,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP48,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP48,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP49,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP49,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP49,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP49,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP49,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP50,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP50,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP50,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP50,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP50,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP50,pro,PRO_RULE_11,Revenue growing slower than profits shows improving operating leverage and scale benefits,80
+COMP50,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP50,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP51,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP51,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP51,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP51,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP52,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP52,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP52,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP52,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP53,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP53,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP53,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP53,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP53,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP54,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP54,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP54,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP54,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP54,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP55,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP55,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP55,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP55,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP55,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP55,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP56,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP56,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP56,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP56,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP57,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP57,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP57,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP57,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP58,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP58,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP58,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP58,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP59,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP59,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP59,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP59,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP59,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP59,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP60,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP60,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP60,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP60,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP60,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP60,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP60,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP61,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP61,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP61,pro,PRO_RULE_11,Revenue growing slower than profits shows improving operating leverage and scale benefits,80
+COMP61,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP61,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP62,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP62,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP62,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP63,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP63,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP63,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP63,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP64,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP64,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP64,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP64,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP64,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP64,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP65,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP65,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP65,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP65,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP65,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP65,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP65,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP66,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP66,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP66,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP66,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP67,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP67,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP67,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP67,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP68,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP68,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP68,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP69,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP69,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP69,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP69,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP69,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP69,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP70,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP70,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP70,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP70,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP70,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP70,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP70,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP71,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP71,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP71,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP71,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP72,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP72,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP72,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP73,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP73,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP73,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP73,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP74,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP74,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP74,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP74,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP74,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP74,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP75,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP75,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP75,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP75,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP75,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP75,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP75,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP76,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP76,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP76,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP76,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP77,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP77,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP77,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP77,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP78,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP78,pro,PRO_RULE_11,Revenue growing slower than profits shows improving operating leverage and scale benefits,80
+COMP78,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP78,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP79,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP79,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP79,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP79,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP79,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP80,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP80,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP80,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP80,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP80,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP80,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP80,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP81,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP81,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP81,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP81,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP81,con,CON_RULE_11,Net debt exceeding 3 times EBITDA is a high leverage ratio and limits financial flexibility,85
+COMP82,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP82,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP82,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP82,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP83,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP83,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP83,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP83,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP83,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP84,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP84,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP84,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP84,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP84,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP85,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP85,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP85,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP85,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP85,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP85,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP86,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP86,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP86,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP86,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP87,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP87,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP87,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP87,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP88,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP88,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP88,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP88,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP89,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP89,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP89,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP89,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP89,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP89,con,CON_BASE_1,Subject to macroeconomic headwinds and competitive market dynamics,70
+COMP90,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP90,pro,PRO_RULE_4,Revenue growing at above 15% CAGR over 5 years reflects strong business momentum,85
+COMP90,pro,PRO_RULE_6,Net profit compounding at above 20% over 5 years creates significant shareholder value,90
+COMP90,pro,PRO_RULE_7,Very high interest coverage ratio reflects negligible financial stress from debt servicing,85
+COMP90,pro,PRO_RULE_9,Earnings per share growing above 15% CAGR indicates strong earnings quality and compounding,85
+COMP90,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP90,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80
+COMP91,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP91,pro,PRO_RULE_8,Consistent dividend yield above 2% backed by positive free cash flow,80
+COMP91,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP91,con,CON_RULE_10,Return on capital employed below 10% suggests the business is not generating sufficient returns on invested capital,80
+COMP92,pro,PRO_RULE_2,Strong free cash flow generation over 5 years signals healthy business fundamentals,90
+COMP92,pro,PRO_RULE_12,Growing asset base funded by internal accruals reflects self-sustaining growth,78
+COMP92,con,CON_RULE_8,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk,80

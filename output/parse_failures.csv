@@ -1,0 +1,4 @@
+company_id,metric_type,raw_text,reason
+COMP06,compounded_sales_growth,Invalid text with no numbers,No regex match for period and percentage pattern
+COMP13,compounded_profit_growth,nan,Missing or NaN value
+COMP26,stock_price_cagr,Growth rate unavailable,No regex match for period and percentage pattern
