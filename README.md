@@ -1,16 +1,27 @@
 # Nifty 100 Analytics & Financial Intelligence Platform
 
-This repository contains a full-stack, data-driven financial analysis pipeline for Nifty 100 stocks. The project is split into four completed sprints:
+This repository contains a full-stack, data-driven financial analysis pipeline for Nifty 100 stocks. The project is split into five completed sprints:
 1. **Sprint 1 (Data Ingestion & Quality Foundation)**
 2. **Sprint 2 (Financial Ratio Engine)**
 3. **Sprint 3 (Stock Screener & Peer/Competitor Analysis)**
 4. **Sprint 4 (Streamlit Dashboard & Valuation Engine)**
+5. **Sprint 5 (Cash Flow Intelligence, Multi-Format PDF Reports & NLP Engine)**
 
-It processes raw financial statements and stock price history for 92 companies across all available years, stores them in SQLite, computes 50+ KPIs, runs a custom-configured stock screening engine, ranks companies relative to industry peers, and provides a multi-screen interactive Streamlit dashboard (`localhost:8501`) alongside a valuation engine.
+It processes raw financial statements and stock price history for 92 companies across all available years, stores them in SQLite, computes 50+ KPIs, runs a custom-configured stock screening engine, ranks companies relative to industry peers, provides a multi-screen interactive Streamlit dashboard (`localhost:8501`), generates 92 company tearsheet PDFs, 11 sector PDFs, a 92-page portfolio summary PDF, and powers an Explainable AI (XAI) report generator.
 
 ---
 
 ## 🛠️ Sprint Deliverables
+
+### Sprint 5: Cash Flow Intelligence, Multi-Format Reports & NLP (Days 29 – 35)
+- **NLP Analysis Text Parser (`src/nlp/parser.py`)**: Parses structured CAGR & ROE values from `analysis.xlsx` using regex, logging failures to `output/parse_failures.csv` and saving `output/analysis_parsed.csv`.
+- **Auto Pros/Cons Generator (`src/nlp/pros_cons_generator.py`)**: Implements 12 Pro & 12 Con quantitative rules with confidence scores > 60%, generating `output/pros_cons_generated.csv` with 100% coverage across all 92 companies.
+- **Cash Flow Intelligence Engine (`src/analytics/cashflow_kpis.py`)**: Computes 5-yr CFO Quality Scores, CapEx Intensity, Distress Signals (`CFO < 0` & `CFF > 0`), Deleveraging Flags, and 8 Capital Allocation pattern labels, outputting `output/cashflow_intelligence.xlsx`, `output/distress_alerts.csv`, and `output/pattern_changes.csv`.
+- **Multi-Format PDF Report Suite (`src/reports/`)**:
+  - `tearsheet.py`: 92 2-page company tearsheets (`reports/tearsheets/{ticker}_tearsheet.pdf`) with ReportLab tables, 10-year Revenue/PAT bar charts, ROE/ROCE line charts, balance sheet stacked bars, cash flow waterfalls, and NLP pro/con badges.
+  - `sector_report.py`: 11 sector analysis PDFs (`reports/sector/{sector}_report.pdf`) with median benchmarks and peer metrics tables.
+  - `portfolio_report.py`: 92-page single portfolio summary PDF (`reports/portfolio/portfolio_summary.pdf`) ordered alphabetically by ticker with color-coded YoY trend arrows.
+- **Explainable AI (XAI) Report Engine (`src/reports/url_explainable_ai_report.py`)**: Accepts URL or screenshot inputs to produce multi-page XAI PDF reports featuring feature importance bar charts, multi-vector confidence radar charts, and decision attribution matrices.
 
 ### Sprint 4: Streamlit Dashboard & Valuation Engine (Days 22 – 28)
 - **Interactive Multi-Page Streamlit App (`src/dashboard/app.py`)**:
