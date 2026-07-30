@@ -5,7 +5,10 @@ from typing import List, Dict, Tuple
 
 
 def generate_pros_cons(db_path: str = "data/db/nifty100.db", output_dir: str = "output"):
-    """Generate pros and cons for all 92 companies with confidence scores based on 12 Pro & 12 Con rules."""
+    """Generate pros and cons for all 92 companies with confidence scores based on 12 Pro & 12 Con rules.
+    
+    Filters rules for confidence_pct > 60% and enforces base fallback rules to guarantee 100% company coverage.
+    """
     os.makedirs(output_dir, exist_ok=True)
     
     conn = sqlite3.connect(db_path)
