@@ -21,18 +21,27 @@ if df_sectors.empty:
 sector_list = ["All Sectors"] + sorted(df_sectors["sector_name"].unique().tolist())
 selected_sector = st.selectbox("Select Broad Sector:", options=sector_list, index=0)
 
-# Load ratio, P&L and valuation data
+# Load ratio, P&L, valuation, and company master data
 df_ratios = get_ratios(year=2023)
-df_pl = get_pl()
-df_val = get_valuation()
-
 if df_ratios.empty:
     df_ratios = get_ratios()
 
-# Merge data for bubble chart
-df_latest_pl = df_pl.groupby("ticker").last().reset_index() if not df_pl.empty else pd.DataFrame()
+df_pl = get_pl()
+df_val = get_valuation()
 
-df_merged = pd.merge(df_ratios, df_companies_industry := get_sectors(), left_on="broad_sector", right_on="sector_name", how="left")
+# Take latest P&L per ticker for revenue (sales)
+if not df_pl.empty and "sales" in df_pl.columns:
+    df_latest_pl = df_pl.sort_values("year").groupby("ticker").last().reset_index()
+    df_merged = pd.merge(df_ratios, df_latest_pl[["ticker", "sales"]], on="ticker", how="left")
+else:
+    df_merged = df_ratios.copy()
+    df_merged["sales"] = 1000.0
+
+# Merge valuation data for market cap / surrogate
+if not df_val.empty:
+    df_val_map = df_val[["company_id", "free_cash_flow_cr"]].copy()
+    df_val_map.rename(columns={"company_id": "ticker"}, inplace=True)
+    df_merged = pd.merge(df_merged, df_val_map, on="ticker", how="left")
 
 # Filter by selected sector
 if selected_sector != "All Sectors":
@@ -42,21 +51,12 @@ if df_merged.empty:
     st.warning(f"No company data available for {selected_sector}.")
     st.stop()
 
-# Compute Market Cap surrogate or FCF / Sales for size
-if "sales" in df_latest_pl:
-    df_merged = pd.merge(df_merged, df_latest_pl[["ticker", "sales"]], on="ticker", how="left")
-else:
-    df_merged["sales"] = 1000.0
-
+# Prepare clean plotting columns
 df_merged["revenue_val"] = df_merged["sales"].fillna(500.0)
 df_merged["roe_val"] = df_merged["return_on_equity_pct"].fillna(df_merged.get("roe", 10.0))
 
-# Market Cap approximation for bubble size: (Net income * PE) or Sales
-if "net_income" in df_latest_pl and "pe_ratio" in df_merged:
-    df_merged = pd.merge(df_merged, df_latest_pl[["ticker", "net_income"]], on="ticker", how="left")
-    df_merged["market_cap_sim"] = (df_merged["net_income"].fillna(50.0) * df_merged["pe_ratio"].fillna(15.0)).abs() + 100.0
-else:
-    df_merged["market_cap_sim"] = df_merged["revenue_val"] * 2.0
+# Market Cap approximation for bubble size: (sales * 2.5) or composite calculation
+df_merged["market_cap_sim"] = (df_merged["revenue_val"] * 2.5).abs() + 500.0
 
 st.subheader("🫧 Sector Bubble Chart (Revenue vs ROE vs Market Cap)")
 
@@ -65,10 +65,10 @@ fig_bubble = px.scatter(
     x="revenue_val",
     y="roe_val",
     size="market_cap_sim",
-    color="industry" if "industry" in df_merged else "broad_sector",
+    color="industry" if "industry" in df_merged.columns else "broad_sector",
     hover_name="company_name",
     hover_data=["ticker", "broad_sector", "pe_ratio", "debt_to_equity"],
-    labels={"revenue_val": "Revenue / Sales (₹ Cr)", "roe_val": "ROE (%)", "market_cap_sim": "Market Cap (₹ Cr)"},
+    labels={"revenue_val": "Revenue / Sales (₹ Cr)", "roe_val": "ROE (%)", "market_cap_sim": "Market Cap (₹ Cr)", "industry": "Sub-Sector"},
     title=f"Scatter Bubble View: {selected_sector}",
     size_max=50
 )
