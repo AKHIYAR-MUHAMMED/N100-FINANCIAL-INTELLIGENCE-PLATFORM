@@ -106,23 +106,31 @@ with col_chart1:
         st.info("Historical P&L data unavailable for chart.")
 
 with col_chart2:
-    st.subheader("📈 ROE & ROCE Trends (10-Year)")
+    st.subheader("📈 ROE & ROCE Trends (10-Year Dual Axis)")
     if not df_ratios.empty and "year" in df_ratios:
-        fig_line = go.Figure()
-        if "return_on_equity_pct" in df_ratios:
-            fig_line.add_trace(go.Scatter(x=df_ratios["year"], y=df_ratios["return_on_equity_pct"], mode="lines+markers", name="ROE (%)", line=dict(color="#ff7f0e", width=2)))
-        elif "roe" in df_ratios:
-            fig_line.add_trace(go.Scatter(x=df_ratios["year"], y=df_ratios["roe"], mode="lines+markers", name="ROE (%)", line=dict(color="#ff7f0e", width=2)))
+        from plotly.subplots import make_subplots
+        fig_line = make_subplots(specs=[[{"secondary_y": True}]])
+        
+        roe_col = "return_on_equity_pct" if "return_on_equity_pct" in df_ratios else "roe"
+        if roe_col in df_ratios:
+            fig_line.add_trace(
+                go.Scatter(x=df_ratios["year"], y=df_ratios[roe_col], mode="lines+markers", name="ROE (%)", line=dict(color="#ff7f0e", width=2)),
+                secondary_y=False
+            )
         
         if "return_on_capital_employed_pct" in df_ratios:
-            fig_line.add_trace(go.Scatter(x=df_ratios["year"], y=df_ratios["return_on_capital_employed_pct"], mode="lines+markers", name="ROCE (%)", line=dict(color="#9467bd", width=2)))
+            fig_line.add_trace(
+                go.Scatter(x=df_ratios["year"], y=df_ratios["return_on_capital_employed_pct"], mode="lines+markers", name="ROCE (%)", line=dict(color="#9467bd", width=2)),
+                secondary_y=True
+            )
 
         fig_line.update_layout(
             xaxis_title="Year",
-            yaxis_title="Percentage (%)",
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
             margin=dict(t=30, b=10, l=10, r=10)
         )
+        fig_line.update_yaxes(title_text="ROE (%)", secondary_y=False)
+        fig_line.update_yaxes(title_text="ROCE (%)", secondary_y=True)
         st.plotly_chart(fig_line, use_container_width=True)
     else:
         st.info("Historical ratio data unavailable for chart.")
@@ -140,17 +148,18 @@ with pros_col:
     pros = df_pc[df_pc["type"].str.upper() == "PRO"] if not df_pc.empty else pd.DataFrame()
     if not pros.empty:
         for _, r in pros.iterrows():
-            st.markdown(f"✔ **{r['point']}**")
+            st.markdown(f"✅ <span style='background-color:rgba(46, 139, 87, 0.2); padding:4px 8px; border-radius:4px; border:1px solid #2e8b57;'>{r['point']}</span>", unsafe_allow_html=True)
     else:
-        st.markdown("✔ Strong market positioning and historical operating cash flow stability.")
-        st.markdown("✔ Consistent return on equity above industry benchmark averages.")
+        st.markdown("✅ <span style='background-color:rgba(46, 139, 87, 0.2); padding:4px 8px; border-radius:4px; border:1px solid #2e8b57;'>Strong market positioning and historical operating cash flow stability.</span>", unsafe_allow_html=True)
+        st.markdown("✅ <span style='background-color:rgba(46, 139, 87, 0.2); padding:4px 8px; border-radius:4px; border:1px solid #2e8b57;'>Consistent return on equity above industry benchmark averages.</span>", unsafe_allow_html=True)
 
 with cons_col:
     st.markdown("#### 🔴 Risk Factors & Cons")
     cons = df_pc[df_pc["type"].str.upper() == "CON"] if not df_pc.empty else pd.DataFrame()
     if not cons.empty:
         for _, r in cons.iterrows():
-            st.markdown(f"✖ **{r['point']}**")
+            st.markdown(f"❌ <span style='background-color:rgba(220, 20, 60, 0.2); padding:4px 8px; border-radius:4px; border:1px solid #dc143c;'>{r['point']}</span>", unsafe_allow_html=True)
     else:
-        st.markdown("✖ Subject to broader macroeconomic cyclicality and raw material cost fluctuations.")
-        st.markdown("✖ Valuation multiples trading near upper historical percentile thresholds.")
+        st.markdown("❌ <span style='background-color:rgba(220, 20, 60, 0.2); padding:4px 8px; border-radius:4px; border:1px solid #dc143c;'>Subject to broader macroeconomic cyclicality and raw material cost fluctuations.</span>", unsafe_allow_html=True)
+        st.markdown("❌ <span style='background-color:rgba(220, 20, 60, 0.2); padding:4px 8px; border-radius:4px; border:1px solid #dc143c;'>Valuation multiples trading near upper historical percentile thresholds.</span>", unsafe_allow_html=True)
+
