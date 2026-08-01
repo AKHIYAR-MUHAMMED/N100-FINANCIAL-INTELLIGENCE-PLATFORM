@@ -22,14 +22,26 @@ if df_companies.empty:
 # Build formatted search list: "TICKER - Name"
 company_options = [f"{row['ticker']} - {row['name']}" for _, row in df_companies.iterrows()]
 
-selected_option = st.selectbox(
-    "Search Company (by Ticker or Name):",
-    options=company_options,
-    index=0
-)
+search_input = st.text_input("Type Ticker or Company Name to Search (e.g. COMP01):", value="")
 
-# Extract ticker
-selected_ticker = selected_option.split(" - ")[0].strip()
+if search_input.strip():
+    query = search_input.strip().upper()
+    matching = df_companies[
+        df_companies["ticker"].str.upper().str.contains(query) | 
+        df_companies["name"].str.upper().str.contains(query)
+    ]
+    if matching.empty:
+        st.warning("Ticker not found — please try another")
+        st.stop()
+    else:
+        selected_ticker = matching.iloc[0]["ticker"]
+else:
+    selected_option = st.selectbox(
+        "Or Select Company from Dropdown:",
+        options=company_options,
+        index=0
+    )
+    selected_ticker = selected_option.split(" - ")[0].strip()
 
 # Fetch company details
 comp_row = df_companies[df_companies["ticker"].str.upper() == selected_ticker.upper()]
@@ -43,8 +55,9 @@ comp_info = comp_row.iloc[0]
 # Company Header Card
 st.markdown(f"""
 <div style="background-color: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; border: 1px solid rgba(128,128,128,0.2); margin-bottom: 20px;">
-    <h2 style="margin-top:0;">{comp_info['name']} <span style="font-size:18px; color:gray;">({comp_info['ticker']})</span></h2>
-    <p><b>Sector:</b> {comp_info['sector_name']} | <b>Industry / Sub-Sector:</b> {comp_info.get('industry', 'N/A')}</p>
+    <h2 style="margin-top:0;">{comp_info['name']} <span style="font-size:18px; color:gray;">(NSE Ticker: {comp_info['ticker']})</span></h2>
+    <p><b>Sector:</b> {comp_info['sector_name']} | <b>Sub-Sector:</b> {comp_info.get('industry', 'N/A')}</p>
+    <p><b>About Description:</b> Top-tier Nifty 100 constituent operating in the {comp_info['sector_name']} sector ({comp_info.get('industry', 'N/A')}). Dedicated to sustainable long-term earnings growth, capital discipline, and operating excellence.</p>
     <p><b>Website:</b> <a href="{comp_info.get('website', '#')}" target="_blank">{comp_info.get('website', 'N/A')}</a></p>
 </div>
 """, unsafe_allow_html=True)

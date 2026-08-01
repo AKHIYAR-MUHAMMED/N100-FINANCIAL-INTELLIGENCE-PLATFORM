@@ -44,17 +44,17 @@ for idx, (preset_name, vals) in enumerate(PRESETS.items()):
 st.sidebar.markdown("---")
 st.sidebar.subheader("🎚️ Custom Screener Sliders")
 
-# Sliders
-st.session_state["roe_min"] = st.sidebar.slider("ROE Min (%)", -50.0, 100.0, float(st.session_state["roe_min"]), 1.0)
-st.session_state["de_max"] = st.sidebar.slider("D/E Max", 0.0, 5.0, float(st.session_state["de_max"]), 0.1)
-st.session_state["fcf_min"] = st.sidebar.slider("FCF Min (₹ Cr)", -1000.0, 5000.0, float(st.session_state["fcf_min"]), 50.0)
-st.session_state["cagr_min"] = st.sidebar.slider("Revenue CAGR 5yr Min (%)", -30.0, 100.0, float(st.session_state["cagr_min"]), 1.0)
-st.session_state["pat_cagr_min"] = st.sidebar.slider("PAT CAGR 5yr Min (%)", -30.0, 100.0, float(st.session_state["pat_cagr_min"]), 1.0)
-st.session_state["opm_min"] = st.sidebar.slider("OPM Min (%)", -20.0, 80.0, float(st.session_state["opm_min"]), 1.0)
-st.session_state["pe_max"] = st.sidebar.slider("P/E Max", 0.0, 200.0, float(st.session_state["pe_max"]), 5.0)
-st.session_state["pb_max"] = st.sidebar.slider("P/B Max", 0.0, 50.0, float(st.session_state["pb_max"]), 0.5)
-st.session_state["div_min"] = st.sidebar.slider("Dividend Payout Min (%)", 0.0, 100.0, float(st.session_state["div_min"]), 1.0)
-st.session_state["icr_min"] = st.sidebar.slider("Interest Coverage Min", 0.0, 50.0, float(st.session_state["icr_min"]), 0.5)
+# Sliders bound directly to session_state keys
+roe_min_val = st.sidebar.slider("ROE Min (%)", -50.0, 100.0, key="roe_min", step=1.0)
+de_max_val = st.sidebar.slider("D/E Max", 0.0, 5.0, key="de_max", step=0.1)
+fcf_min_val = st.sidebar.slider("FCF Min (₹ Cr)", -1000.0, 5000.0, key="fcf_min", step=50.0)
+cagr_min_val = st.sidebar.slider("Revenue CAGR 5yr Min (%)", -30.0, 100.0, key="cagr_min", step=1.0)
+pat_cagr_min_val = st.sidebar.slider("PAT CAGR 5yr Min (%)", -30.0, 100.0, key="pat_cagr_min", step=1.0)
+opm_min_val = st.sidebar.slider("OPM Min (%)", -20.0, 80.0, key="opm_min", step=1.0)
+pe_max_val = st.sidebar.slider("P/E Max", 0.0, 200.0, key="pe_max", step=5.0)
+pb_max_val = st.sidebar.slider("P/B Max", 0.0, 50.0, key="pb_max", step=0.5)
+div_min_val = st.sidebar.slider("Dividend Payout Min (%)", 0.0, 100.0, key="div_min", step=1.0)
+icr_min_val = st.sidebar.slider("Interest Coverage Min", 0.0, 50.0, key="icr_min", step=0.5)
 
 # Filtering logic
 df_filtered = df_latest.copy()

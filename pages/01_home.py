@@ -9,7 +9,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.dashboard.utils.db import get_ratios, get_companies, get_sectors
+from src.dashboard.utils.db import get_ratios, get_companies, get_sectors, get_peers
 
 st.title("📊 Market Overview - Home")
 
@@ -63,8 +63,22 @@ st.markdown("---")
 col_left, col_right = st.columns([1, 1])
 
 with col_left:
-    st.subheader("🏢 Sector Distribution")
-    if not df_sectors.empty:
+    st.subheader("🏢 Sector Breakdown (11 Peer Groups)")
+    df_peers = get_peers()
+    if not df_peers.empty:
+        peer_counts = df_peers.groupby("group_name").size().reset_index(name="company_count")
+        fig_donut = px.pie(
+            peer_counts,
+            names="group_name",
+            values="company_count",
+            hole=0.4,
+            title="Company Count Breakdown across 11 Sectors",
+            color_discrete_sequence=px.colors.qualitative.Pastel
+        )
+        fig_donut.update_traces(textinfo="percent+label")
+        fig_donut.update_layout(margin=dict(t=40, b=0, l=0, r=0))
+        st.plotly_chart(fig_donut, use_container_width=True)
+    elif not df_sectors.empty:
         fig_donut = px.pie(
             df_sectors,
             names="sector_name",
