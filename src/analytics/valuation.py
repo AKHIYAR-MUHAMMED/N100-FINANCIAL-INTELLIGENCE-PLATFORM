@@ -155,13 +155,12 @@ class ValuationEngine:
             def flag_valuation(row):
                 pe = row["P/E"]
                 sec_med = row["sector_median_PE"]
-                pct_diff = row["PE_vs_sector_median_pct"]
+                pct_diff = row.get("PE_vs_sector_median_pct", 0.0)
                 if pd.isna(pe) or pd.isna(sec_med) or sec_med <= 0:
                     return "Fair"
-                # Strict 1.5x / 0.7x rule OR relative top/bottom sector variance (+15% / -10%)
-                if pe > (sec_med * 1.15) or pct_diff >= 15.0:
+                if pe >= (sec_med * 1.5) or pct_diff >= 15.0:
                     return "Caution"
-                elif pe < (sec_med * 0.85) or pct_diff <= -10.0:
+                elif pe <= (sec_med * 0.7) or pct_diff <= -10.0:
                     return "Discount"
                 return "Fair"
 
