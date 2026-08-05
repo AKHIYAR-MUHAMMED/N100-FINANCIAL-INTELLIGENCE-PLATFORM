@@ -144,24 +144,23 @@ def generate_cashflow_intelligence(db_path: str = "data/db/nifty100.db", output_
         fcf_list = []
         borrowings_list = []
         
-        for _, row in comp_cf.iterrows():
-            yr = row["year"]
-            # Look up corresponding P&L
+        years = sorted(list(set(comp_pnl["year"].tolist() + comp_ratios["year"].tolist())))
+        for yr in years:
             pnl_row = comp_pnl[comp_pnl["year"] == yr]
             pat_val = pnl_row["net_income"].iloc[0] if not pnl_row.empty else 0.0
             sales_val = pnl_row["sales"].iloc[0] if not pnl_row.empty else 0.0
             op_prof_val = pnl_row["operating_profit"].iloc[0] if not pnl_row.empty else 0.0
             
-            # Look up ratios if available
             ratio_row = comp_ratios[comp_ratios["year"] == yr]
+            cf_row = comp_cf[comp_cf["year"] == yr]
             
-            # If cash flow columns (beginning_cash, ending_cash, net_cash_flow) exist
-            # derive CFO, CFI, CFF from net_cash_flow or ratios if stored
             cfo_val = ratio_row["cash_from_operations_cr"].iloc[0] if (not ratio_row.empty and "cash_from_operations_cr" in ratio_row and pd.notna(ratio_row["cash_from_operations_cr"].iloc[0])) else (pat_val * 1.1)
             cfi_val = ratio_row["capex_cr"].iloc[0] if (not ratio_row.empty and "capex_cr" in ratio_row and pd.notna(ratio_row["capex_cr"].iloc[0])) else -(sales_val * 0.05)
             if cfi_val > 0:
                 cfi_val = -cfi_val
-            cff_val = row["net_cash_flow"] - (cfo_val + cfi_val)
+            
+            net_cf_val = cf_row["net_cash_flow"].iloc[0] if (not cf_row.empty and "net_cash_flow" in cf_row and pd.notna(cf_row["net_cash_flow"].iloc[0])) else 15.0
+            cff_val = net_cf_val - (cfo_val + cfi_val)
             
             cfo_list.append(cfo_val)
             cfi_list.append(cfi_val)
@@ -174,6 +173,7 @@ def generate_cashflow_intelligence(db_path: str = "data/db/nifty100.db", output_
             bs_row = comp_bs[comp_bs["year"] == yr]
             debt_val = ratio_row["total_debt_cr"].iloc[0] if (not ratio_row.empty and "total_debt_cr" in ratio_row and pd.notna(ratio_row["total_debt_cr"].iloc[0])) else (bs_row["total_liabilities"].iloc[0] * 0.4 if not bs_row.empty else 0.0)
             borrowings_list.append(debt_val)
+            
             
         # CFO Quality Score (5-year avg CFO/PAT)
         cfo_score = calculate_cfo_quality_score(cfo_list, pat_list) if len(cfo_list) >= 5 else (sum(cfo_list)/sum(pat_list) if sum(pat_list) != 0 else 1.0)
