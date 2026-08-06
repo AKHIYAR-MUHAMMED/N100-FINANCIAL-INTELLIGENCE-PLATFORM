@@ -1,6 +1,4 @@
-import pytest
 import os
-import pandas as pd
 from src.reports.tearsheet import build_tearsheet
 from src.reports.sector_report import build_sector_report
 

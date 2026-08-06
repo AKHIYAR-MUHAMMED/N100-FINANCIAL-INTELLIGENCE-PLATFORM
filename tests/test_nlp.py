@@ -1,6 +1,4 @@
-import pytest
 import os
-import pandas as pd
 from src.nlp.parser import parse_analysis_text
 from src.nlp.pros_cons_generator import generate_pros_cons
 
