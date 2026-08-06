@@ -2,7 +2,16 @@ import os
 import sqlite3
 from pathlib import Path
 import pandas as pd
-import streamlit as st
+
+try:
+    import streamlit as st
+    cache_data = st.cache_data
+except (ImportError, ModuleNotFoundError):
+    def cache_data(ttl=600):
+        def decorator(func):
+            return func
+        return decorator
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_DB_PATH = PROJECT_ROOT / "data" / "db" / "nifty100.db"
@@ -26,7 +35,7 @@ def get_connection(db_path: Path = DEFAULT_DB_PATH) -> sqlite3.Connection:
     return conn
 
 
-@st.cache_data(ttl=600)
+@cache_data(ttl=600)
 def get_companies() -> pd.DataFrame:
     """
     Fetches master metadata for all 92 Nifty 100 constituent companies from the database.
@@ -55,7 +64,7 @@ def get_companies() -> pd.DataFrame:
         conn.close()
 
 
-@st.cache_data(ttl=600)
+@cache_data(ttl=600)
 def get_ratios(ticker: str = None, year: int = None) -> pd.DataFrame:
     """
     Fetches financial ratios and computed KPIs for companies, supporting optional filtering by ticker and year.
@@ -93,7 +102,7 @@ def get_ratios(ticker: str = None, year: int = None) -> pd.DataFrame:
         conn.close()
 
 
-@st.cache_data(ttl=600)
+@cache_data(ttl=600)
 def get_pl(ticker: str = None) -> pd.DataFrame:
     """
     Fetches Profit & Loss (Income Statement) historical data for companies.
@@ -123,7 +132,7 @@ def get_pl(ticker: str = None) -> pd.DataFrame:
         conn.close()
 
 
-@st.cache_data(ttl=600)
+@cache_data(ttl=600)
 def get_bs(ticker: str = None) -> pd.DataFrame:
     """
     Fetches Balance Sheet historical statement records for companies.
@@ -153,7 +162,7 @@ def get_bs(ticker: str = None) -> pd.DataFrame:
         conn.close()
 
 
-@st.cache_data(ttl=600)
+@cache_data(ttl=600)
 def get_cf(ticker: str = None) -> pd.DataFrame:
     """
     Fetches Cash Flow historical statement records for companies.
@@ -183,7 +192,7 @@ def get_cf(ticker: str = None) -> pd.DataFrame:
         conn.close()
 
 
-@st.cache_data(ttl=600)
+@cache_data(ttl=600)
 def get_sectors() -> pd.DataFrame:
     """
     Fetches broad sector details aggregated with constituent company counts.
@@ -209,7 +218,7 @@ def get_sectors() -> pd.DataFrame:
         conn.close()
 
 
-@st.cache_data(ttl=600)
+@cache_data(ttl=600)
 def get_peers(group_name: str = None) -> pd.DataFrame:
     """
     Fetches peer group mappings and member companies.
@@ -243,7 +252,7 @@ def get_peers(group_name: str = None) -> pd.DataFrame:
         conn.close()
 
 
-@st.cache_data(ttl=600)
+@cache_data(ttl=600)
 def get_valuation(ticker: str = None) -> pd.DataFrame:
     """
     Fetches valuation parameters including P/E, P/B, FCF, Net Income, and latest close price.
@@ -293,7 +302,7 @@ def get_valuation(ticker: str = None) -> pd.DataFrame:
         conn.close()
 
 
-@st.cache_data(ttl=600)
+@cache_data(ttl=600)
 def get_pros_cons(ticker: str) -> pd.DataFrame:
     """
     Fetches Qualitative Pros and Cons investment thesis points for a target company.
@@ -313,7 +322,7 @@ def get_pros_cons(ticker: str) -> pd.DataFrame:
         conn.close()
 
 
-@st.cache_data(ttl=600)
+@cache_data(ttl=600)
 def get_documents(ticker: str) -> pd.DataFrame:
     """
     Fetches filing metadata and document paths for annual reports of a target company.
@@ -333,7 +342,7 @@ def get_documents(ticker: str) -> pd.DataFrame:
         conn.close()
 
 
-@st.cache_data(ttl=600)
+@cache_data(ttl=600)
 def get_capital_allocation() -> pd.DataFrame:
     """
     Fetches the latest capital allocation pattern classifications for all companies.
