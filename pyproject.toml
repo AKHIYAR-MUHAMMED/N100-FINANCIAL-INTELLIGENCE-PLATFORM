@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bluestocks-financial-foundation"
+version = "1.2.0"
+description = "Institutional Financial Data Foundation, Quantitative Screener, and Automated Research Report Engine"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "Akhiyar Muhammed", email = "akhiyaarmuhammed123@gmail.com" }
+]
+dependencies = [
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "reportlab>=4.0.0",
+    "matplotlib>=3.7.0",
+    "streamlit>=1.25.0",
+    "pytest>=7.0.0"
+]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-q --ignore=venv"
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.black]
+line-length = 120
+target-version = ['py310', 'py311', 'py312']
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+skip = [".venv", "venv"]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["venv/*", "tests/*"]

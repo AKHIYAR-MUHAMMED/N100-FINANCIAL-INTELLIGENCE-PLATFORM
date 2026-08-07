@@ -1,68 +1,45 @@
-.PHONY: setup install format lint test clean load ratios screener peer report dashboard api streamlit valuation
+# BlueStocks Financial Intelligence Platform Makefile
 
-VENV_BIN = venv/Scripts
+PYTHON = python
+PYTEST = pytest
+SRC_DIR = src
+TESTS_DIR = tests
 
-setup:
-	@echo "Creating directories..."
-	mkdir -p data/raw data/processed src tests logs
-	@echo "Initializing virtual environment..."
-	python -m venv venv
+.PHONY: help install test test-cov lint format clean run-api run-dashboard run-status
 
-install:
-	@echo "Installing dependencies..."
-	$(VENV_BIN)/pip install -r requirements.txt
-
-format:
-	@echo "Formatting code with black and isort..."
-	$(VENV_BIN)/black src tests
-	$(VENV_BIN)/isort src tests
-
-lint:
-	@echo "Linting with flake8 and mypy..."
-	$(VENV_BIN)/flake8 src tests
-	$(VENV_BIN)/mypy src --ignore-missing-imports
+help:
+	@echo "Available commands:"
+	@echo "  make test          - Run full pytest test suite"
+	@echo "  make test-cov      - Run pytest with code coverage report"
+	@echo "  make lint          - Check code formatting and linting"
+	@echo "  make format        - Format code using Black and isort"
+	@echo "  make run-status    - Display database diagnostics via CLI"
+	@echo "  make run-api       - Start embedded dashboard REST API server"
+	@echo "  make run-dashboard - Start Streamlit interactive web dashboard"
+	@echo "  make clean         - Remove bytecode cache and temporary files"
 
 test:
-	@echo "Running unit tests with pytest..."
-	$(VENV_BIN)/pytest tests/ --cov=src --cov-report=term-missing
+	$(PYTHON) -m $(PYTEST) -v
+
+test-cov:
+	$(PYTHON) -m $(PYTEST) --cov=$(SRC_DIR) --cov-report=term-missing
+
+lint:
+	$(PYTHON) -m flake8 $(SRC_DIR) $(TESTS_DIR) --max-line-length=120 --ignore=E501,W503
+
+format:
+	$(PYTHON) -m black $(SRC_DIR) $(TESTS_DIR)
+	$(PYTHON) -m isort $(SRC_DIR) $(TESTS_DIR)
+
+run-status:
+	$(PYTHON) -m src.cli status
+
+run-api:
+	$(PYTHON) -m src.api_server
+
+run-dashboard:
+	streamlit run src/dashboard/app.py
 
 clean:
-	@echo "Cleaning cache files..."
-	rm -rf .pytest_cache .mypy_cache .coverage htmlcov
-	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
-
-load:
-	@echo "Running ETL Ingestion Loader..."
-	$(VENV_BIN)/python -m src.etl.loader
-
-ratios:
-	@echo "Running Financial Ratios Calculator..."
-	$(VENV_BIN)/python -m src.etl.ratios
-
-screener:
-	@echo "Running Stock Screener Engine..."
-	$(VENV_BIN)/python -m src.screener.engine
-
-peer:
-	@echo "Running Peer & Competitor Analyzer..."
-	$(VENV_BIN)/python -m src.analytics.peer
-
-report:
-	@echo "Generating Ingestion and Data Quality Report..."
-	$(VENV_BIN)/python -m src.report
-
-dashboard:
-	@echo "Starting Dashboard & API Server at http://localhost:8000..."
-	$(VENV_BIN)/python -m src.api_server
-
-api:
-	@echo "Starting Dashboard & API Server at http://localhost:8000..."
-	$(VENV_BIN)/python -m src.api_server
-
-streamlit:
-	@echo "Starting 8-screen Streamlit Dashboard at http://localhost:8501..."
-	$(VENV_BIN)/streamlit run src/dashboard/app.py
-
-valuation:
-	@echo "Running Valuation Engine..."
-	$(VENV_BIN)/python -m src.analytics.valuation
+	find . -type d -name "__pycache__" -exec rm -rf {} +
+	find . -type f -name "*.pyc" -delete
