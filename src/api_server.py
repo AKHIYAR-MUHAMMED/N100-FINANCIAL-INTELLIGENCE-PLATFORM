@@ -94,6 +94,45 @@ class DashboardAPIHandler(http.server.BaseHTTPRequestHandler):
                 companies = [dict(row) for row in cursor.fetchall()]
                 self.wfile.write(json.dumps(companies).encode("utf-8"))
 
+            elif path == "/api/health":
+                cursor.execute("SELECT 1;")
+                self.wfile.write(
+                    json.dumps({
+                        "status": "online",
+                        "database": str(DB_PATH),
+                        "api_version": "1.2.0"
+                    }).encode("utf-8")
+                )
+
+            elif path == "/api/company":
+                query_params = parse_qs(parsed_url.query)
+                ticker = query_params.get("ticker", [None])[0]
+                if not ticker:
+                    self.wfile.write(json.dumps({"error": "Missing ticker parameter"}).encode("utf-8"))
+                else:
+                    cursor.execute("SELECT * FROM companies WHERE ticker = ?;", (ticker,))
+                    row = cursor.fetchone()
+                    if row:
+                        self.wfile.write(json.dumps(dict(row)).encode("utf-8"))
+                    else:
+                        self.wfile.write(json.dumps({"error": f"Company {ticker} not found"}).encode("utf-8"))
+
+            elif path == "/api/analytics/risk":
+                query_params = parse_qs(parsed_url.query)
+                ticker = query_params.get("ticker", [None])[0]
+                from src.analytics.risk import monte_carlo_forecast
+                forecast = monte_carlo_forecast(
+                    initial_value=100.0,
+                    mean_growth=0.12,
+                    volatility=0.18,
+                    periods=5,
+                    n_simulations=500
+                )
+                self.wfile.write(json.dumps({
+                    "ticker": ticker or "UNSPECIFIED",
+                    "risk_metrics": forecast
+                }).encode("utf-8"))
+
             elif path == "/api/failures":
                 cursor.execute(
                     "SELECT * FROM validation_failures ORDER BY failure_id DESC LIMIT 100;"
