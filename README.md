@@ -22,6 +22,10 @@ It processes raw financial statements and stock price history for 92 companies a
   - `sector_report.py`: 11 sector analysis PDFs (`reports/sector/{sector}_report.pdf`) with median benchmarks and peer metrics tables.
   - `portfolio_report.py`: 92-page single portfolio summary PDF (`reports/portfolio/portfolio_summary.pdf`) ordered alphabetically by ticker with color-coded YoY trend arrows.
 - **Explainable AI (XAI) Report Engine (`src/reports/url_explainable_ai_report.py`)**: Accepts URL or screenshot inputs to produce multi-page XAI PDF reports featuring feature importance bar charts, multi-vector confidence radar charts, and decision attribution matrices.
+- **DuPont Analysis Decomposition Engine (`src/analytics/dupont.py`)**: Implements 3-step (NPM × Asset Turnover × Equity Multiplier) and 5-step (Tax Burden × Interest Burden × Operating Margin × Asset Turnover × Financial Leverage) ROE decomposition models.
+- **Multi-Factor Screener & Ranking Engine (`src/screener/multi_factor.py`)**: Customizable multi-factor percentile ranking model weighting Growth, Value, Profitability/Quality, and Solvency metrics into a composite score (0-100).
+- **CLI Intelligence & Export Suite (`src/cli.py`)**: Terminal command-line tool supporting `status`, `screen`, `risk`, and `export` (JSON, Markdown, CSV) workflows.
+- **Database Optimization Utility (`src/db_optimizer.py`)**: Automated SQLite indexing and query execution benchmarking tool.
 
 ### Sprint 4: Streamlit Dashboard & Valuation Engine (Days 22 – 28)
 - **Interactive Multi-Page Streamlit App (`src/dashboard/app.py`)**:
