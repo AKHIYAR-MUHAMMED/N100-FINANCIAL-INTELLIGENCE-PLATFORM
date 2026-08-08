@@ -29,3 +29,11 @@ def test_cli_risk_command(capsys):
 def test_cli_no_command(capsys):
     ret = main([])
     assert ret == 0
+
+
+def test_cli_export_command(capsys):
+    ret = main(["export", "--ticker", "COMP01", "--format", "json"])
+    assert ret == 0
+    captured = capsys.readouterr()
+    assert "COMP01" in captured.out
+

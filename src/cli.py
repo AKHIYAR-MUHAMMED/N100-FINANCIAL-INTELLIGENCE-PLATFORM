@@ -121,6 +121,70 @@ def cmd_risk(
     return 0
 
 
+def cmd_export(
+    db_path: Path,
+    ticker: str,
+    output_format: str = "json",
+    output_path: Optional[Path] = None,
+) -> int:
+    """Export company metrics to JSON, Markdown, or CSV."""
+    db = DatabaseManager(db_path)
+    conn = db.get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM companies WHERE ticker = ?;", (ticker,))
+    company = cursor.fetchone()
+    if not company:
+        print(f"Company {ticker} not found.")
+        conn.close()
+        return 1
+
+    company_dict = dict(company)
+
+    cursor.execute(
+        "SELECT * FROM financial_ratios WHERE ticker = ? ORDER BY year DESC LIMIT 1;",
+        (ticker,),
+    )
+    ratios = cursor.fetchone()
+    if ratios:
+        company_dict["latest_ratios"] = dict(ratios)
+
+    conn.close()
+
+    if output_format.lower() == "json":
+        out = json.dumps(company_dict, indent=2)
+    elif output_format.lower() == "markdown":
+        out = f"# Financial Profile: {company_dict.get('name', ticker)} ({ticker})\n\n"
+        out += f"- **Sector**: {company_dict.get('sector_name', 'N/A')}\n"
+        out += f"- **Industry**: {company_dict.get('industry', 'N/A')}\n\n"
+        if "latest_ratios" in company_dict:
+            lr = company_dict["latest_ratios"]
+            out += "### Latest Ratios\n"
+            out += f"- **ROE**: {lr.get('roe')}%\n"
+            out += f"- **ROCE**: {lr.get('roce')}%\n"
+            out += f"- **P/E**: {lr.get('pe_ratio')}\n"
+            out += f"- **P/B**: {lr.get('pb_ratio')}\n"
+    elif output_format.lower() == "csv":
+        import io
+        import csv
+        buf = io.StringIO()
+        writer = csv.writer(buf)
+        writer.writerow(company_dict.keys())
+        writer.writerow([str(v) for v in company_dict.values()])
+        out = buf.getvalue()
+    else:
+        print(f"Unsupported format: {output_format}")
+        return 1
+
+    if output_path:
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(out)
+        print(f"Exported {ticker} data to {output_path}")
+    else:
+        print(out)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Build argument parser for BlueStocks CLI."""
     parser = argparse.ArgumentParser(
@@ -152,6 +216,12 @@ def build_parser() -> argparse.ArgumentParser:
     risk_parser.add_argument("--simulations", type=int, default=500, help="Number of paths")
     risk_parser.add_argument("--growth", type=float, default=0.12, help="Expected growth rate")
     risk_parser.add_argument("--volatility", type=float, default=0.20, help="Annual volatility")
+
+    # export command
+    export_parser = subparsers.add_parser("export", help="Export company financials to JSON/MD/CSV")
+    export_parser.add_argument("--ticker", type=str, required=True, help="Stock ticker")
+    export_parser.add_argument("--format", type=str, default="json", choices=["json", "markdown", "csv"], help="Format")
+    export_parser.add_argument("--output", type=Path, default=None, help="Output destination file")
     
     return parser
 
@@ -181,6 +251,13 @@ def main(args: Optional[list] = None) -> int:
             simulations=parsed.simulations,
             growth=parsed.growth,
             volatility=parsed.volatility
+        )
+    elif parsed.command == "export":
+        return cmd_export(
+            db_path=parsed.db,
+            ticker=parsed.ticker,
+            output_format=parsed.format,
+            output_path=parsed.output,
         )
     return 0
 
