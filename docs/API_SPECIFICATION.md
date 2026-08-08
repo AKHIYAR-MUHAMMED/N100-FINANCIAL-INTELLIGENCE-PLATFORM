@@ -15,6 +15,10 @@ http://localhost:8000
 |---|---|---|---|
 | `GET` | `/api/summary` | Get system status, DB row counts, DQ metrics, and sector distribution | None |
 | `GET` | `/api/companies` | List all Nifty 100 constituent companies | `sector` (optional) |
+| `GET` | `/api/health` | Service health check and database connection status | None |
+| `GET` | `/api/analytics/risk` | Monte Carlo simulations and risk metrics for a ticker | `ticker` |
+| `GET` | `/api/analytics/dupont` | 3-step and 5-step DuPont decomposition history | `company_id` |
+| `GET` | `/api/screener/rank` | Multi-factor quantitative scoring and ranking | None |
 | `GET` | `/api/failures` | Retrieve recent data quality (DQ) validation failures | None |
 | `GET` | `/` | Serve interactive dashboard HTML frontend | None |
 

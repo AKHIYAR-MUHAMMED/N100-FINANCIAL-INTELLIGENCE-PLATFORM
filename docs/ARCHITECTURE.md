@@ -32,6 +32,7 @@ graph TD
 
 ### 2.2 Financial Analytics Engine (`src/analytics/`)
 - **`valuation.py`**: Computes relative valuation metrics (P/E, P/B, EV/EBITDA, Dividend Yield) and historical decile distributions.
+- **`dupont.py`**: Decomposes Return on Equity (ROE) via 3-step (Operating Margin × Asset Turnover × Financial Leverage) and 5-step (Tax Burden × Interest Burden × Operating Margin × Asset Turnover × Financial Leverage) models.
 - **`cagr.py`**: Calculates multi-period compound annual growth rates (1Y, 3Y, 5Y, 10Y) for Revenue, EBITDA, Net Profit, and Operating Cash Flow.
 - **`cashflow_kpis.py`**: Evaluates Free Cash Flow (FCF), FCF Conversion Rates, Cash Flow to Debt, and Cash Reinvestment Ratios.
 - **`peer.py`**: Constructs peer groups by industry sector and market capitalization bucket, normalizing metrics for cross-sectional ranking.
@@ -39,6 +40,7 @@ graph TD
 
 ### 2.3 Quantitative Screener Engine (`src/screener/`)
 - **`engine.py`**: Rule-based filtering and composite multi-factor scoring (Quality, Value, Growth, Financial Health).
+- **`multi_factor.py`**: Customizable multi-factor percentile ranking model weighting Growth, Value, Profitability/Quality, and Solvency metrics into a composite score (0-100).
 - Supports dynamic filter predicates (e.g., `ROE > 15%`, `Debt/Equity < 0.5`, `P/E < Sector Median`).
 
 ### 2.4 NLP & Financial Sentiment Parser (`src/nlp/`)
