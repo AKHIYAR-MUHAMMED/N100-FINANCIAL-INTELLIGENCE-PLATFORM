@@ -104,29 +104,52 @@ def rank_companies_from_db(
     conn = sqlite3.connect(db_path)
     query = """
         SELECT 
-            c.company_id,
+            c.ticker as company_id,
             c.name,
-            c.sector,
-            cf.roe,
-            cf.roce,
-            cf.pe_ratio,
-            cf.pb_ratio,
-            cf.debt_to_equity,
-            cf.sales_growth
+            c.sector_name as sector,
+            fr.roe,
+            fr.roce,
+            fr.pe_ratio,
+            fr.pb_ratio,
+            fr.debt_equity as debt_to_equity
         FROM companies c
         JOIN (
-            SELECT company_id, roe, roce, pe_ratio, pb_ratio, debt_to_equity, sales_growth,
-                   ROW_NUMBER() OVER (PARTITION BY company_id ORDER BY year DESC) as rn
-            FROM company_financials
-        ) cf ON c.company_id = cf.company_id AND cf.rn = 1
+            SELECT ticker, roe, roce, pe_ratio, pb_ratio, debt_equity,
+                   ROW_NUMBER() OVER (PARTITION BY ticker ORDER BY year DESC) as rn
+            FROM financial_ratios
+        ) fr ON c.ticker = fr.ticker AND fr.rn = 1
     """
-    df = pd.read_sql_query(query, conn)
-    conn.close()
+    try:
+        df = pd.read_sql_query(query, conn)
+    except Exception:
+        fallback_query = """
+            SELECT 
+                c.company_id,
+                c.name,
+                c.sector,
+                cf.roe,
+                cf.roce,
+                cf.pe_ratio,
+                cf.pb_ratio,
+                cf.debt_to_equity
+            FROM companies c
+            JOIN (
+                SELECT company_id, roe, roce, pe_ratio, pb_ratio, debt_to_equity,
+                       ROW_NUMBER() OVER (PARTITION BY company_id ORDER BY year DESC) as rn
+                FROM company_financials
+            ) cf ON c.company_id = cf.company_id AND cf.rn = 1
+        """
+        try:
+            df = pd.read_sql_query(fallback_query, conn)
+        except Exception:
+            df = pd.DataFrame()
+    finally:
+        conn.close()
 
     if df.empty:
         return []
 
-    if sector:
+    if sector and "sector" in df.columns:
         df = df[df["sector"].str.lower() == sector.lower()]
 
     ranked = calculate_multi_factor_scores(df, weights)

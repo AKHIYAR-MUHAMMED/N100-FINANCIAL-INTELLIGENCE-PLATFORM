@@ -108,21 +108,44 @@ def calculate_dupont_5step(
 def analyze_company_dupont(db_path: str, company_id: str) -> Dict[str, Any]:
     """Retrieves multi-year financials for a company and computes DuPont 3-step and 5-step models."""
     conn = sqlite3.connect(db_path)
+    # Support both schema styles
     query = """
         SELECT 
-            year,
-            sales as revenue,
-            net_profit as net_income,
-            profit_before_tax as ebt,
-            operating_profit as ebit,
-            total_assets,
-            (equity_capital + reserves) as total_equity
-        FROM company_financials
-        WHERE company_id = ?
-        ORDER BY year ASC
+            p.year,
+            p.sales as revenue,
+            p.net_income as net_income,
+            p.profit_before_tax as ebt,
+            p.operating_profit as ebit,
+            b.total_assets,
+            (b.equity_capital + b.reserves) as total_equity
+        FROM profitandloss p
+        JOIN balancesheet b ON p.ticker = b.ticker AND p.year = b.year
+        WHERE p.ticker = ?
+        ORDER BY p.year ASC
     """
-    df = pd.read_sql_query(query, conn, params=(company_id,))
-    conn.close()
+    try:
+        df = pd.read_sql_query(query, conn, params=(company_id,))
+    except Exception:
+        # Fallback to company_financials if available
+        fallback_query = """
+            SELECT 
+                year,
+                sales as revenue,
+                net_profit as net_income,
+                profit_before_tax as ebt,
+                operating_profit as ebit,
+                total_assets,
+                (equity_capital + reserves) as total_equity
+            FROM company_financials
+            WHERE company_id = ?
+            ORDER BY year ASC
+        """
+        try:
+            df = pd.read_sql_query(fallback_query, conn, params=(company_id,))
+        except Exception:
+            df = pd.DataFrame()
+    finally:
+        conn.close()
 
     if df.empty:
         return {"company_id": company_id, "history": []}
