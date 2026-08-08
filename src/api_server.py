@@ -133,6 +133,18 @@ class DashboardAPIHandler(http.server.BaseHTTPRequestHandler):
                     "risk_metrics": forecast
                 }).encode("utf-8"))
 
+            elif path == "/api/analytics/dupont":
+                query_params = parse_qs(parsed_url.query)
+                company_id = query_params.get("company_id", ["COMP01"])[0]
+                from src.analytics.dupont import analyze_company_dupont
+                result = analyze_company_dupont(str(DB_PATH), company_id)
+                self.wfile.write(json.dumps(result).encode("utf-8"))
+
+            elif path == "/api/screener/rank":
+                from src.screener.multi_factor import rank_companies_from_db
+                ranked = rank_companies_from_db(str(DB_PATH))
+                self.wfile.write(json.dumps(ranked[:20]).encode("utf-8"))
+
             elif path == "/api/failures":
                 cursor.execute(
                     "SELECT * FROM validation_failures ORDER BY failure_id DESC LIMIT 100;"
