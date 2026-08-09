@@ -1,8 +1,11 @@
 import os
+import logging
 import sqlite3
 import pandas as pd
 import numpy as np
 from typing import List, Optional
+
+logger = logging.getLogger(__name__)
 
 
 def calculate_free_cash_flow(operating_activity: float, investing_activity: float) -> float:
@@ -235,6 +238,16 @@ def generate_cashflow_intelligence(db_path: str = "data/db/nifty100.db", output_
     df_intel = pd.DataFrame(intel_rows)
     intel_xlsx_path = os.path.join(output_dir, "cashflow_intelligence.xlsx")
     df_intel.to_excel(intel_xlsx_path, index=False)
+
+    # Distribution summary
+    cfo_dist = df_intel["cfo_quality_label"].value_counts().to_dict()
+    capex_dist = df_intel["capex_label"].value_counts().to_dict()
+    alloc_dist = df_intel["capital_allocation_label"].value_counts().to_dict()
+    print(f"CFO Quality distribution: {cfo_dist}")
+    print(f"CapEx Intensity distribution: {capex_dist}")
+    print(f"Capital Allocation patterns: {alloc_dist}")
+    logger.info("Cashflow intelligence generated: %d companies, %d distress flags",
+                len(df_intel), int(df_intel['distress_flag'].sum()))
     
     # If no distress alerts triggered, add a sample row to ensure alerts file is generated & structured
     if not distress_alerts:
