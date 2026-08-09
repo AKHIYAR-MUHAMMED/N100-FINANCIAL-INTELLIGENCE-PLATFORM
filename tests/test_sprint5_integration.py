@@ -11,6 +11,11 @@ def test_nlp_parser():
     assert os.path.exists("output/analysis_parsed.csv")
     assert os.path.exists("output/parse_failures.csv")
     assert set(["company_id", "metric_type", "period_years", "value_pct"]).issubset(df_parsed.columns)
+    # Parse success rate should exceed 50%
+    total = len(df_parsed) + len(df_failures)
+    assert total > 0
+    parse_rate = len(df_parsed) / total
+    assert parse_rate > 0.5, f"Parse success rate too low: {parse_rate:.1%}"
 
 
 def test_pros_cons_generator():
@@ -30,6 +35,9 @@ def test_pros_cons_generator():
     cons_set = set(df_pc[df_pc["type"] == "con"]["company_id"])
     assert len(pros_set) == 92
     assert len(cons_set) == 92
+    
+    # Verify rule_ids are valid
+    assert df_pc["rule_id"].str.startswith(("PRO_", "CON_")).all()
 
 
 def test_cashflow_intelligence_module():
@@ -45,20 +53,33 @@ def test_cashflow_intelligence_module():
         "distress_flag", "deleveraging_flag", "capital_allocation_label"
     ]
     assert list(df_intel.columns) == expected_cols
+    
+    # Verify CFO quality labels are valid
+    valid_cfo_labels = {"High Quality", "Moderate", "Accrual Risk"}
+    assert set(df_intel["cfo_quality_label"]).issubset(valid_cfo_labels)
+    
+    # Verify CapEx labels are valid
+    valid_capex_labels = {"Asset Light", "Moderate", "Capital Intensive"}
+    assert set(df_intel["capex_label"]).issubset(valid_capex_labels)
+    
+    # Verify flags are binary
+    assert df_intel["distress_flag"].isin([0, 1]).all()
+    assert df_intel["deleveraging_flag"].isin([0, 1]).all()
 
 
 def test_batch_tearsheets():
     pdf_files = glob.glob("reports/tearsheets/*.pdf")
     assert len(pdf_files) == 92
     for pdf_path in pdf_files:
-        assert os.path.getsize(pdf_path) >= 30 * 1024
+        size = os.path.getsize(pdf_path)
+        assert size >= 30 * 1024, f"{pdf_path} is only {size/1024:.1f} KB, expected >= 30 KB"
 
 
 def test_batch_sector_reports():
     sector_pdfs = glob.glob("reports/sector/*.pdf")
     assert len(sector_pdfs) == 11
     for pdf_path in sector_pdfs:
-        assert os.path.getsize(pdf_path) > 1000
+        assert os.path.getsize(pdf_path) > 5 * 1024, f"{pdf_path} too small"
 
 
 def test_portfolio_summary_report():
