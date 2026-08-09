@@ -175,6 +175,7 @@ def generate_portfolio_summary(db_path: str = "data/db/nifty100.db", output_dir:
             ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.HexColor('#FFFFFF'), colors.HexColor('#F8FAFC')]),
             ('PADDING', (0,0), (-1,-1), 8),
             ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+            ('WORDWRAP', (0,0), (-1,-1), True),
         ]))
         story.append(kpi_table)
         story.append(Spacer(1, 20))
