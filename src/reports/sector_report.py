@@ -217,6 +217,7 @@ def build_sector_report(sector_name: str, db_path: str = "data/db/nifty100.db", 
         ('ROWBACKGROUNDS', (0,1), (-1,-1), [colors.HexColor('#FFFFFF'), colors.HexColor('#F8FAFC')]),
         ('PADDING', (0,0), (-1,-1), 4),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('WORDWRAP', (0,0), (-1,-1), True),
     ]))
     story.append(comp_table)
     
