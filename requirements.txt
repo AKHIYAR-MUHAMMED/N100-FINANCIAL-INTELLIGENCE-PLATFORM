@@ -18,3 +18,6 @@ requests
 jinja2
 matplotlib
 seaborn
+reportlab
+Pillow
+streamlit

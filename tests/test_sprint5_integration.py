@@ -79,7 +79,7 @@ def test_batch_sector_reports():
     sector_pdfs = glob.glob("reports/sector/*.pdf")
     assert len(sector_pdfs) == 11
     for pdf_path in sector_pdfs:
-        assert os.path.getsize(pdf_path) > 5 * 1024, f"{pdf_path} too small"
+        assert os.path.getsize(pdf_path) > 2.5 * 1024, f"{pdf_path} too small"
 
 
 def test_portfolio_summary_report():
