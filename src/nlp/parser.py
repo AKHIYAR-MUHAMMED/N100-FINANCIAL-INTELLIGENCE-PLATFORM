@@ -1,8 +1,11 @@
 import os
 import re
+import logging
 import sqlite3
 import pandas as pd
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 
 def parse_analysis_text(input_excel_path: str = "data/raw/analysis.xlsx", output_dir: str = "output"):
@@ -116,12 +119,19 @@ def parse_analysis_text(input_excel_path: str = "data/raw/analysis.xlsx", output
 
     parsed_csv_path = os.path.join(output_dir, "analysis_parsed.csv")
     failures_csv_path = os.path.join(output_dir, "parse_failures.csv")
-    
+
     df_parsed.to_csv(parsed_csv_path, index=False)
     df_failures.to_csv(failures_csv_path, index=False)
-    
+
+    total = len(df_parsed) + len(df_failures)
+    parse_rate = (len(df_parsed) / total * 100) if total > 0 else 0
+    diverged = int(df_parsed["divergence_flag"].sum()) if "divergence_flag" in df_parsed.columns else 0
+
     print(f"Analysis text parsing complete. Parsed: {len(df_parsed)} records -> {parsed_csv_path}")
     print(f"Parse failures logged: {len(df_failures)} records -> {failures_csv_path}")
+    print(f"Parse success rate: {parse_rate:.1f}% | CAGR divergence flags (>5%): {diverged}")
+    logger.info("NLP parser completed: %d parsed, %d failures, %.1f%% success rate",
+                len(df_parsed), len(df_failures), parse_rate)
     return df_parsed, df_failures
 
 
