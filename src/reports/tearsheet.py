@@ -312,6 +312,7 @@ def build_tearsheet(ticker: str, db_path: str = "data/db/nifty100.db", output_di
         ('INNERGRID', (0,0), (-1,-1), 0.5, colors.HexColor('#CBD5E1')),
         ('ALIGN', (0,0), (-1,-1), 'CENTER'),
         ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('WORDWRAP', (0,0), (-1,-1), True),
     ]))
     story.append(tile_table)
     story.append(Spacer(1, 12))
