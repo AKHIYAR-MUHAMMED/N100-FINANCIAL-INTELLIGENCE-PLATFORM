@@ -1,7 +1,10 @@
 import os
+import logging
 import sqlite3
 import pandas as pd
 from typing import List, Dict, Tuple
+
+logger = logging.getLogger(__name__)
 
 
 def generate_pros_cons(db_path: str = "data/db/nifty100.db", output_dir: str = "output"):
@@ -311,24 +314,29 @@ def generate_pros_cons(db_path: str = "data/db/nifty100.db", output_dir: str = "
     df_output = pd.DataFrame(results)
     out_csv = os.path.join(output_dir, "pros_cons_generated.csv")
     df_output.to_csv(out_csv, index=False)
-    
+
     # Verification check
     pro_companies = set(df_output[df_output["type"] == "pro"]["company_id"])
     con_companies = set(df_output[df_output["type"] == "con"]["company_id"])
     all_companies = set(companies_df["ticker"])
-    
+
     missing_pros = all_companies - pro_companies
     missing_cons = all_companies - con_companies
-    
+
+    avg_pros = len(df_output[df_output["type"] == "pro"]) / len(all_companies)
+    avg_cons = len(df_output[df_output["type"] == "con"]) / len(all_companies)
+
     print(f"Pros/Cons generation complete -> {out_csv}")
     print(f"Total entries generated: {len(df_output)}")
-    print(f"Companies with Pros: {len(pro_companies)}/{len(all_companies)}")
-    print(f"Companies with Cons: {len(con_companies)}/{len(all_companies)}")
+    print(f"Companies with Pros: {len(pro_companies)}/{len(all_companies)} | Avg pros/company: {avg_pros:.1f}")
+    print(f"Companies with Cons: {len(con_companies)}/{len(all_companies)} | Avg cons/company: {avg_cons:.1f}")
     if missing_pros or missing_cons:
         print(f"WARNING: Missing pros for: {missing_pros}, Missing cons for: {missing_cons}")
+        logger.warning("Coverage gap - missing pros: %d, missing cons: %d", len(missing_pros), len(missing_cons))
     else:
         print("VERIFICATION SUCCESS: Every company has at least 1 pro and at least 1 con!")
-        
+        logger.info("Pros/Cons verification passed for all %d companies", len(all_companies))
+
     return df_output
 
 
